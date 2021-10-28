@@ -29,6 +29,13 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
+    <style>
+        @media only screen and (max-width: 953px) {
+            .ht-buy-token .link {
+                display: inline !important;
+            }
+        }
+    </style>
 </head>
 
 <body class="home1-bg-color">
@@ -51,19 +58,12 @@
                                     <li><a href="#_roadmap" class="smoothscroll">roadmap</a></li>
                                     <li><a href="#_team" class="smoothscroll">team</a></li>
                                     <li><a href="#_contact" class="smoothscroll">contact</a></li>
-                                    @if (Route::has('login'))
-                                    @auth
-                                    <li><a href="{{route('login')}}" class="link btn-style-1" >Home</a> </li>
-                                    @else
-                                    <li> <a href="{{route('login')}}" class="link btn-style-1">Login</a> </li>
-                                    @endauth
-                                @endif
                                 </ul>
                             </nav>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-2 d-none d-lg-block">
+                <div class="col-lg-2 col-sm-12 d-lg-block">
                     <div class="ht-buy-token">
                       @if (Route::has('login'))
                             @auth
@@ -88,7 +88,7 @@
                         <h2 class="title">Blockchain Technology to Ensure Seamless</h2>
                         <p class="text">We to help tenants unfreeze millions of dollars</p>
                         <div class="btns">
-                            <a href="#" class="btn-style-3 link hvr-bs btn-hvr-anim-top">Sign Up To Join</a>
+                            <a href="{{route('login')}}" class="btn-style-3 link hvr-bs btn-hvr-anim-top">Sign Up To Join</a>
                             <a href="#" class="btn-style-4 link hvr-bs btn-hvr-anim-top">Token Distribution</a>
                         </div>
                     </div>
