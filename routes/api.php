@@ -34,7 +34,7 @@ Route::group(['prefix' => 'xendit'], function(){
   Route::group(['prefix' => 'ewallet'], function() {
     Route::get('success', 'Api\XenditApiController@redirectSuccessEwallet')->name('ewallet.success');
     Route::get('failed', 'Api\XenditApiController@redirectFailedEwallet')->name('ewallet.failed');
-    Route::post('status', 'Api\XenditApiController@chargeStatus')->name('ewallet.status');
+    Route::get('status', 'Api\XenditApiController@chargeStatus')->name('ewallet.status');
     Route::post('callback', 'Api\XenditApiController@callbackEWallet')->name('ewallet.callback');
     Route::post('callback-va', 'Api\XenditApiController@callbackVaPaid')->name('ewallet.callback-va');
     Route::post('callback-va-created', 'Api\XenditApiController@callbackVaCreated')->name('ewallet.callback-va-created');
