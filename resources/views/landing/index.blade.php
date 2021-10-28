@@ -51,6 +51,13 @@
                                     <li><a href="#_roadmap" class="smoothscroll">roadmap</a></li>
                                     <li><a href="#_team" class="smoothscroll">team</a></li>
                                     <li><a href="#_contact" class="smoothscroll">contact</a></li>
+                                    @if (Route::has('login'))
+                                    @auth
+                                    <li><a href="{{route('login')}}" class="link btn-style-1" >Home</a> </li>
+                                    @else
+                                    <li> <a href="{{route('login')}}" class="link btn-style-1">Login</a> </li>
+                                    @endauth
+                                @endif
                                 </ul>
                             </nav>
                         </div>
@@ -64,7 +71,7 @@
                             @else
                                 <a href="{{route('login')}}" class="link btn-style-1">Login</a>
                             @endauth
-                    @endif
+                        @endif
                         
                     </div>
                 </div>
@@ -76,7 +83,7 @@
         <div class="hero-banner item-bounce"><img src="{{asset('assets/landing/img/home-one/hero-banner.png')}}" alt=""></div>
         <div class="container">
             <div class="row">
-                <div class="col-lg-6 col-md-8 col-12">
+                <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="hero-content">
                         <h2 class="title">Blockchain Technology to Ensure Seamless</h2>
                         <p class="text">We to help tenants unfreeze millions of dollars</p>
