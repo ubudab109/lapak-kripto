@@ -1,0 +1,662 @@
+
+@media only screen and (min-width: 1201px) and (max-width: 1440px) {
+
+.hero-area .hero-banner {
+    width: 50%;
+}
+.about-v2-area .about-v2-bg {
+    top: 210px;
+}
+.download-area {
+    padding: 10px 0 154px;
+}
+.blog-area {
+    padding: 190px 0 146px;
+}
+.roadmap-slider::before {
+    top: 64px;
+    width: 104%;
+}
+.blog-area .blog-bg img {
+    height: 126%;
+}
+
+
+
+
+}
+
+
+
+
+/* Medium Layout: 1367px. */
+
+@media only screen and (min-width: 1200px) and (max-width: 1367px) {
+
+.hero-area .hero-banner {
+    width: 46%;
+}
+.roadmap-slider::before {
+    left: 0;
+    top: 61px;
+    width: 100%;
+}
+.about-v2-area .about-v2-bg {
+    top: auto;
+    bottom: -45%;
+}
+.download-area {
+    padding: 20px 0 130px;
+}
+.faq-area {
+    padding: 180px 0 180px;
+}
+.blog-area .blog-bg {
+    height: 110%;
+}
+.blog-area .blog-bg img {
+    height: 115%;
+}
+
+
+
+
+}
+
+
+/* Medium Layout: 1280px. */
+
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+
+.faq-area {
+    padding: 200px 0 110px;
+}
+.hero-area .hero-banner {
+    top: 300px;
+    width: 50%;
+}
+.hero-area .hero-content .title {
+    font-size: 40px;
+    line-height: 52px;
+}
+.hero-area .hero-content .btns .link {
+    margin-right: 0;
+}
+.roadmap-area {
+    padding: 0 0 60px;
+}
+.roadmap-slider::before {
+    display: none;
+}
+.roadmap-slider {
+    flex-wrap: wrap;
+    padding: 0 30px;
+}
+.roadmap-slider .single-roadmap {
+    padding: 0 15px;
+    flex: 1 1 33%;
+    max-width: 33%;
+}
+.about-v2-area .about-v2-bg {
+    top: 80%;
+}
+.download-area {
+    padding: 130px 0 154px;
+    margin: 0;
+}
+.download-area .download-bg {
+    display: none;
+}
+.download-area .download-content .title {
+    font-size: 44px;
+    line-height: 48px;
+}
+.download-area .download-content .buttons .link {
+    margin-right: 0;
+}
+.download-button-1 {
+    padding: 14px 14px 8px 32px;
+}
+.download-button-1 .icon {
+    font-size: 20px;
+    left: 12px;
+}
+.download-button-1 .available {
+    font-size: 12px;
+}
+.download-button-1 .store-name {
+    font-size: 18px;
+}
+.download-button-2 {
+    padding: 14px 14px 8px 32px;
+}
+.download-button-2 .icon {
+    font-size: 20px;
+    left: 12px;
+}
+.download-button-2 .available {
+    font-size: 12px;
+}
+.team-area .team-bg {
+    bottom: -98px;
+}
+.team-area {
+    background: #120A39;
+}
+
+
+
+}
+
+
+/* Tablet Layout: 768px. */
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+
+.logo a { 
+    font-size: 22px;
+}
+.main-menu {
+    position: relative;
+    top: -54px;
+    margin-bottom: -54px;
+    text-align: right;
+}
+.main-menu .stellarnav ul li,
+.main-menu .stellarnav ul li a {
+    display: block;
+    text-align: left;
+    color: #000;
+}
+.hero-area .hero-content .title {
+    font-size: 34px;
+    line-height: 38px;
+}
+.hero-area .hero-content .text {
+    font-size: 18px;
+}
+.btn-style-3 {
+    font-size: 14px;
+    padding: 4px 16px;
+}
+.btn-style-4 {
+    font-size: 14px;
+    padding: 4px 16px;
+}
+.hero-area .hero-banner {
+    top: 200px;
+    width: 40%;
+}
+.top-brands-area .all-brands .single {
+    flex: 1 1 20%;
+    max-width: 20%;
+}
+.counter-area .cs-recived {
+    margin-top: 60px;
+}
+.counter-area {
+    padding: 0 0 60px;
+}
+.about-v1-area .about-v1-content .title {
+    font-size: 38px;
+    line-height: 42px;
+}
+.about-v2-area .about-v2-content .title {
+    font-size: 38px;
+    line-height: 42px;
+}
+.section-title .title {
+    font-size: 42px;
+    line-height: 42px;
+}
+.about-v2-area .about-v2-bg {
+    display: none;
+}
+.roadmap-area {
+    padding: 0 0 60px;
+}
+.roadmap-slider::before {
+    display: none;
+}
+.roadmap-slider {
+    flex-wrap: wrap;
+    padding: 0 30px;
+}
+.roadmap-slider .single-roadmap {
+    padding: 0 15px;
+    flex: 1 1 33%;
+    max-width: 33%;
+}
+.download-area {
+    padding: 50px 0 154px;
+    margin: 0;
+}
+.download-area .download-bg {
+    top: -80px;
+}
+.download-area .download-content .title {
+    font-size: 42px;
+    line-height: 44px;
+}
+.download-button-1 {
+    padding: 14px 14px 8px 32px;
+}
+.download-button-1 .icon {
+    font-size: 20px;
+    left: 12px;
+}
+.download-button-1 .available {
+    font-size: 12px;
+}
+.download-button-1 .store-name {
+    font-size: 18px;
+}
+.download-button-2 {
+    padding: 14px 14px 8px 32px;
+}
+.download-button-2 .icon {
+    font-size: 20px;
+    left: 12px;
+}
+.download-button-2 .available {
+    font-size: 12px;
+}
+.download-button-2 .store-name {
+    font-size: 18px;
+}
+.download-area .download-content .buttons .link {
+    margin-right: 0;
+}
+.why-area .why-left-content .title {
+    font-size: 38px;
+    line-height: 40px;
+}
+.why-left-content {
+    margin-bottom: 60px;
+}
+.token-area .token-info-all {
+    text-align: center;
+}
+.token-area .token-info-all .single {
+    min-width: 158px;
+    max-width: 158px;
+    margin: 0 5px 30px;
+    display: inline-block;
+    float: none;
+}
+.token-area .token-info-all .single:nth-child(2n+1) {
+    float: none;
+}
+.token-area .token-info-all.style-2 .single:nth-child(2n) {
+    float: none;
+}
+.token-area .token-banner-main .tb-bg {
+    display: none;
+}
+.token-area .token-banner-main .link {
+    display: block;
+    max-width: 180px;
+    margin: 60px auto;
+}
+.token-area .token-down-banner {
+    margin-top: 70px;
+}
+.team-area .team-bg {
+    display: none;
+}
+.blog-area {
+    padding: 70px 0 100px;
+}
+.blog-area .blog-bg {
+    display: none;
+}
+.faq-area {
+    padding: 130px 0;
+}
+.faq-area .faq-content .title {
+    font-size: 38px;
+    line-height: 40px;
+}
+.contact-area .contact-info-single .info a {
+    font-size: 14px;
+}
+.about-v1-area {
+    padding: 50px 0 156px;
+}
+.download-area .download-bg img {
+    height: 120%;
+}
+
+
+}
+
+
+/* Mobile Layout: 320px. */
+
+@media only screen and (max-width: 767px) {}
+
+
+/* Wide Mobile Layout: 480px. */
+
+@media only screen and (min-width: 481px) and (max-width: 767px) {
+
+.logo a { 
+    font-size: 22px;
+}
+.main-menu {
+    position: relative;
+    top: -54px;
+    margin-bottom: -54px;
+    text-align: right;
+}
+.main-menu .stellarnav ul li,
+.main-menu .stellarnav ul li a {
+    display: block;
+    text-align: left;
+    color: #000;
+}
+.hero-area .hero-banner {
+    display: none;
+}
+.hero-area .hero-content .title {
+    font-size: 34px;
+    line-height: 38px;
+}
+.hero-area .hero-content .text {
+    font-size: 18px;
+}
+.top-brands-area .all-brands .single {
+    text-align: center;
+    flex: 1 1 50%;
+    max-width: 50%;
+    margin-bottom: 18px;
+}
+.top-brands-area .all-brands .single:last-child {
+    text-align: right;
+}
+.counter-area .ca-starts-in {
+    margin-bottom: 30px;
+}
+.counter-area {
+    padding: 0 0 90px;
+}
+.about-v1-area .about-v1-content .title {
+    font-size: 32px;
+    line-height: 36px;
+}
+.about-v1-banner {
+    margin-bottom: 60px;
+}
+.about-v1-banner {
+    margin-bottom: 60px;
+}
+.about-v2-area .about-v2-content .title {
+    font-size: 36px;
+    line-height: 40px;
+}
+.about-v2-area .about-v2-bg {
+    display: none;
+}
+.section-title .title {
+    font-size: 36px;
+    line-height: 40px;
+}
+.roadmap-slider::before {
+    display: none;
+}
+.roadmap-slider {
+    padding: 0 30px;
+    flex-wrap: wrap;
+}
+.roadmap-slider .single-roadmap {
+    flex: 1 1 50%;
+    max-width: 50%;
+    padding: 0 5px 0;
+}
+.download-area .download-content .title {
+    font-size: 36px;
+    line-height: 40px;
+}
+.about-v1-area {
+    padding: 0 0 110px;
+}
+.download-area .download-bg {
+    display: none;
+}
+.roadmap-area {
+    padding: 0 0 60px;
+}
+.download-banner {
+    margin-bottom: 60px;
+}
+.why-left-content {
+    margin-bottom: 60px;
+}
+.token-area .token-info-all .single {
+    min-width: 158px;
+    max-width: 158px;
+    margin: 0 5px 30px;
+    display: inline-block;
+}
+.token-area .token-banner-main {
+    margin-bottom: 60px;
+}
+.token-area .token-down-banner {
+    margin-top: 70px;
+}
+.why-area {
+    padding: 60px 0 100px;
+}
+.blog-area .blog-bg {
+    display: none;
+}
+.blog-area {
+    padding: 50px 0 146px;
+}
+.team-area .team-bg {
+    height: auto;
+}
+.faq-area .faq-content .title {
+    font-size: 38px;
+    line-height: 40px;
+}
+.faq-area {
+    padding: 100px 0 100px;
+}
+footer .footer-bottom-area .copyright {
+    text-align: center;
+}
+footer .footer-bottom-area .footer-links {
+    text-align: center;
+}
+
+
+
+
+
+}
+
+
+/* Small Mobile Layout: 480px. */
+
+@media only screen and (min-width: 240px) and (max-width: 480px) {
+
+/* header.navbar-fixed-top {
+    position: absolute;
+    padding: 34px 0;
+    animation: none;
+} */
+.logo a { 
+    font-size: 22px;
+}
+
+.main-menu {
+        position: relative;
+        top: -54px;
+        margin-bottom: -54px;
+        text-align: right;
+}
+.main-menu .stellarnav ul li,
+.main-menu .stellarnav ul li a {
+    display: block;
+    text-align: left;
+    color: #000;
+}
+.hero-area .hero-banner {
+    display: none;
+}
+.hero-area .hero-content .title {
+    font-size: 28px;
+    line-height: 34px;
+}
+.hero-area .hero-content .text {
+    font-size: 18px;
+}
+.btn-style-3 {
+    font-size: 14px;
+    padding: 4px 16px;
+}
+.btn-style-4 {
+    font-size: 14px;
+    padding: 4px 16px;
+}
+.hero-area .hero-content .btns .link {
+    margin-right: 6px;
+}
+.top-brands-area .all-brands .single {
+    flex: 1 1 50%;
+    margin-bottom: 18px;
+    text-align: center;
+}
+.top-brands-area .all-brands .single:last-child {
+    text-align: center;
+}
+.counter-area .ca-starts-in {
+    padding: 50px 30px;
+    margin-bottom: 30px;
+
+}
+.counter-area .cs-recived {
+    padding: 50px 30px;
+}
+.about-v1-area .about-v1-content .title {
+    font-size: 28px;
+    line-height: 32px;
+}
+.about-v2-area .about-v2-content .title {
+    font-size: 28px;
+    line-height: 32px;
+}
+.section-title .title {
+    font-size: 30px;
+    line-height: 34px;
+}
+.about-v1-banner {
+    margin-bottom: 60px;
+}
+.roadmap-slider {
+    padding: 0 30px;
+    flex-wrap: wrap;
+}
+.roadmap-slider::before {
+    display: none;
+}
+.roadmap-slider .single-roadmap {
+    flex: 1 1 100%;
+    max-width: 100%;
+    margin-bottom: 30px;
+    padding: 0;
+}
+.roadmap-slider .single-roadmap.v2 {
+    padding: 0;
+}
+.hero-area {
+    padding: 250px 0 210px;
+}
+.about-v2-area {
+    padding: 0 0 80px;
+}
+.download-area .download-content .title {
+    font-size: 30px;
+    line-height: 34px;
+}
+.download-button-1 {
+    padding: 14px 20px 8px 38px;
+}
+.download-button-1 .icon {
+    font-size: 20px;
+    left: 12px;
+}
+.download-button-1 .available {
+    font-size: 12px;
+}
+.download-button-1 .store-name {
+    font-size: 18px;
+}
+.download-button-2 {
+    padding: 14px 20px 8px 38px;
+}
+.download-button-2 .icon {
+    font-size: 20px;
+    left: 12px;
+}
+.download-button-2 .available {
+    font-size: 12px;
+}
+.download-button-2 .store-name {
+    font-size: 18px;
+}
+.download-area .download-content .buttons .link {
+    margin-right: 0;
+}
+.download-banner {
+    margin-bottom: 60px;
+}
+.why-area .why-left-content .title {
+    font-size: 28px;
+}
+.why-left-content {
+    margin-bottom: 30px;
+}
+.download-area .download-bg {
+    display: none;
+}
+.download-area {
+    margin: 0;
+}
+.token-area .token-banner-main {
+    margin-bottom: 60px;
+}
+.token-area .token-down-banner {
+    margin-top: 70px;
+}
+.team-area .team-bg {
+    height: auto;
+}
+.blog-area .blog-bg {
+    display: none;
+}
+.blog-area {
+    padding: 150px 0 146px;
+}
+.faq-area .faq-content .title {
+    font-size: 32px;
+    line-height: 36px;
+}
+footer .footer-bottom-area .copyright {
+    text-align: center;
+}
+footer .footer-bottom-area .footer-links {
+    text-align: center;
+}
+.token-area .token-banner-main .tb-bg {
+    display: none;
+}
+
+
+
+}
+
+
+/*big from small mobile, small from wide mobile*/
+@media only screen and (min-width: 380px) and (max-width: 480px) {}
