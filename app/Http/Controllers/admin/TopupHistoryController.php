@@ -22,12 +22,12 @@ class TopupHistoryController extends Controller
         DB::beginTransaction();
         try {
             $transaction = TopupTransaction::find($id);
-            $wallet = Wallet::where('user_id', $transaction->user->id)->where('name','IDR')->first();
+            $wallet = Wallet::where('user_id', $transaction->user->id)->where('name','DOLLAR')->first();
             if ($request->status == 'COMPLETED') {
                 $transaction->update([
                     'status'    => 'COMPLETED',
                 ]);
-                $wallet->increment('balance', $transaction->total_topup);
+                $wallet->increment('balance', $transaction->dollar_topup);
             } else {
                 $transaction->update([
                     'status'    => 'FAILED',
@@ -260,6 +260,12 @@ class TopupHistoryController extends Controller
             ->editColumn('user', function($row) {
                 $html = '<a title="'.__('View').'" href="'.route('adminUserProfile').'?id='.encrypt($row->user->id).'&type=view" class="user-two">'.$row->user->email.'</a>';
                 return $html;
+            })
+            ->editColumn('idr', function($row) {
+                return 'Rp. '. number_format($row->total_topup, 0);
+            })
+            ->editColumn('dollar', function($row) {
+                return number_format($row->dollar_topup, 0).' $';
             })
             ->editColumn('status', function($row) {
                 if ($row->status == 'PENDING') {

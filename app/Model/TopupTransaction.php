@@ -12,6 +12,7 @@ class TopupTransaction extends Model
     protected $fillable = [
         'user_id',
         'external_id',
+        'dollar_topup',
         'total_topup',
         'status',
         'payment_type',

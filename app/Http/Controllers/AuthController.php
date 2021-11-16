@@ -93,7 +93,7 @@ class AuthController extends Controller
 
             Wallet::create([
                 'user_id' => $user->id,
-                'name' => 'IDR',
+                'name' => 'DOLLAR',
                 'is_primary' => STATUS_SUCCESS,
             ]);
             if ($parentUserId > 0) {
@@ -137,7 +137,6 @@ class AuthController extends Controller
                     if ($user->status == STATUS_SUCCESS) {
                         if (!empty($user->is_verified)) {
                             $data['success'] = true;
-//                            \auth()->loginUsingId($user->id);
                             $data['message'] = __('Login successful');
                             //  return redirect()->back()->with('success',$data['message']);
                             if (Auth::user()->role == USER_ROLE_SUPERADMIN || Auth::user()->role == USER_ROLE_ADMIN) {

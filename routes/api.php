@@ -24,7 +24,7 @@ Route::get('/price/{price}','Api\WalletNotifier@getPriceCoin')->name('getPriceCo
 Route::get('/getCurrency','Api\WalletNotifier@getCurrency')->name('getCurrency');
 Route::get('/getListAccounts','Api\WalletNotifier@getListAccounts')->name('getListAccounts');
 Route::get('/getAuth','Api\WalletNotifier@getAuth')->name('getAuth');
-
+Route::get('/dollar','Api\WalletNotifier@getDollarKurs')->name('getDollarKurs');
 Route::group(['prefix' => 'xendit'], function(){
   Route::get('payment-channels', 'Api\XenditApiController@listPaymentChannels')->name('listPaymentChannels');
   Route::post('create-va/{id}', 'Api\XenditApiController@createFixedVa')->name('createFixedVa');

@@ -1,59 +1,9 @@
 @extends('user.master',['menu'=>'topup'])
 @section('title', isset($title) ? $title : '')
 @section('style')
-<style>
-    .modal.fade .modal-bottom,
-    .modal.fade .modal-left,
-    .modal.fade .modal-right,
-    .modal.fade .modal-top {
-        position: fixed;
-        z-index: 1055;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        margin: 0;
-        max-width: 100%
-    }
-     .modal.fade .modal-right {
-     left: auto !important;
-     transform: translate3d(100%, 0, 0);
-     transition: transform .3s cubic-bezier(.25, .8, .25, 1)
-    }
-
-    .modal.fade.show .modal-bottom,
-    .modal.fade.show .modal-left,
-    .modal.fade.show .modal-right,
-    .modal.fade.show .modal-top {
-        transform: translate3d(0, 0, 0)
-    }
-
-    .w-xl {
-        width: 320px;
-        height: 100%;
-    }
-
-    .modal-content,
-    .modal-footer,
-    .modal-header {
-        border: none
-    }
-
-    .img-payment {
-        width: 50px;
-        display: block;
-        top: 0;
-        left: 0;
-        right: 0;
-    }
-
-    /* Solid border */
-    hr.solid {
-        border-top: 3px solid #bbb;
-    }
-</style>
 @endsection
 @section('content')
+    <div class="loader" id="loader"></div>
     <div class="row">
         <div id="modal-backdrop-dark" class="modal bg-dark fade" data-backdrop="false">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -74,19 +24,31 @@
                     </div>
                     <div class="cp-user-buy-coin-content-area">
                         <div class="cp-user-coin-info">
-                            <form action="{{route('buyCoinsProcess')}}" method="POST" enctype="multipart/form-data" id="buy_coin">
-                                @csrf
+                            <form enctype="multipart/form-data" id="buy_coin">
                                 <div class="form-group">
-                                    <label>{{__('IDR Amount')}}</label>
-                                    <input onkeyup="keyupAmount(this.value)" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autocomplete="off" id="amount" name="idr_amount" class="form-control" placeholder="{{__('Your Amount')}}">
+                                    <label>{{__('Dollar Amount')}}</label>
+                                    <div class="input-group mb-3">
+                                        <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autocomplete="off" id="amount" name="idr_amount" class="form-control" placeholder="{{__('Your Amount')}}">
+                                        <div class="input-group-append">
+                                          <span class="input-group-text" id="basic-addon2">$</span>
+                                        </div>
+                                      </div>
                                     <span style="color: red" id="error_amount"></span>
+                                    {{-- still hard code --}}
+                                    <input type="hidden" name="" id="dollar_buy" value="16200"> 
+                                </div>
+
+                                <div class="form-group">
+                                    <label>{{__('Total Pay')}}</label>
+                                    <input readonly type="hidden" id="total_idr_dollar" name="idr_total" class="form-control" />
+                                    <input readonly type="text" id="total_idr_dollar_show" name="idr_total_show" class="form-control" />
                                 </div>
                                 
                                 <div class="cp-user-payment-type d-none" id="payment_type_channel">
                                     <h3>{{__('Payment Type')}}</h3>
                                     @if(isset($settings['payment_method_bank_deposit']) && $settings['payment_method_bank_deposit'] == 1)
                                         <div class="form-group">
-                                            <input type="radio" value="{{BANK_DEPOSIT}}" onchange="formBank()" class="check_payment" id="f-option" name="payment_type">
+                                            <input type="radio" value="{{BANK_DEPOSIT}}" class="check_payment" id="f-option" name="payment_type">
                                             <label for="f-option">{{__('Bank Deposit')}}</label>
                                         </div>
                                     @endif
@@ -295,531 +257,83 @@
 <script src="{{asset('assets/dropify/dropify.js')}}"></script>
 <script src="{{asset('assets/dropify/form-file-uploads.js')}}"></script>
 <script type="text/javascript">
+
+    $(document).ready(() => {
+        $.ajax({
+            type: 'GET',
+            url: "{{route('getDollarKurs')}}",
+            dataType: 'json',
+            success: function (res) {
+                // $("#dollar_buy").val(res.beli)
+                $("#loader").addClass('hide-loader');
+            }, 
+            error: function (res) {
+                alert('Terjadi kesahalan, Mohon memuat ulang halaman ini')
+                window.location.reload();
+            }
+        });
+    });
+
+    function numberWithCommas(x) {
+        var	number_string = x.toString(),
+            split	= number_string.split('.'),
+            sisa 	= split[0].length % 3,
+            rupiah 	= split[0].substr(0, sisa),
+            ribuan 	= split[0].substr(sisa).match(/\d{1,3}/gi);
+                
+        if (ribuan) {
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+        rupiah = split[1] != undefined ? rupiah : rupiah;
+
+        return rupiah;
+    }
+
     $("#amount").on("keyup", () => {
+        var dollar = $("#dollar_buy").val();
         if ($("#amount").val() == '') {
             $(':button').prop('disabled', true); // Disable all the buttons
-            $("#error_amount").text('MININUM TOPUP = Rp. 50.000')
+            $("#error_amount").text('Dollar Input is Required');
+            $("#total_idr_dollar").val('')
+            $("#total_idr_dollar_show").val('');
         } else {
-            if ($("#amount").val() < 50000) {
-                $(':button').prop('disabled', true); // Disable all the buttons
-                $("#error_amount").text('MININUM TOPUP = Rp. 50.000')
-            } else {
-                $("#payment_type_channel").removeClass("d-none");
-                $(':button').prop('disabled', false); // Enable all the button
-                $("#error_amount").text('')
-            }
+            $("#payment_type_channel").removeClass("d-none");
+            $(':button').prop('disabled', false); // Enable all the button
+            $("#error_amount").text('');
+            var dollarDepo = $("#amount").val();
+            var tempRupiah = dollarDepo * dollar;
+            var fee = tempRupiah * 0.1;
+            var total = tempRupiah + fee;
+            $("#total_idr_dollar").val(total)
+            $("#total_idr_dollar_show").val('Rp. ' + numberWithCommas(total));
 
         }
 
     })
 
-    // Validation keyup phone number ovo
-    $("#ovo_number").on('input propertychange paste', function (e) {
-        $(this).val($(this).val().replace(/[^0-9]/g, ''));
-        var val = $(this).val()
-        var reg = /^0/gi;
-        if (val.match(reg)) {
-            $(this).val(val.replace(reg, ''));
+    $(".check_payment").change(function() {
+        if ($('input.check_payment').is(':checked')) { 
+            $("#bank-deposit").removeClass('d-none');
+        } else {
+            $("#bank-deposit").addClass('d-none');
         }
     });
-
-    // RUPIAH FORMAT
-    function formatRupiah(angka, prefix){
-        var number_string = angka.replace(/[^,\d]/g, '').toString(),
-        split   		= number_string.split(','),
-        sisa     		= split[0].length % 3,
-        rupiah     		= split[0].substr(0, sisa),
-        ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
-    
-        // tambahkan titik jika yang di input sudah menjadi angka ribuan
-        if(ribuan){
-            separator = sisa ? '.' : '';
-            rupiah += separator + ribuan.join('.');
-        }
-    
-        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-    }
-
-    // FORM BANK DEPOSIT MANUAl
-    function formBank() {
-        $('.payment_method').addClass('d-none');$('.bank-details').addClass('d-block');$('.bank-details').removeClass('d-none');$('.bank_payment').toggleClass('d-none');
-        $("#payment-gate").addClass('d-none');   
-    }
-
-    // LIST PAYMENT CHANNELS
-    function getPaymentChannels() {
-        $("#bank-deposit").addClass('d-none');
-        $("#payment-gate").removeClass('d-none');
-        $("#virtual-account").html('')
-        $("#ewallet").html('')
-        $("#retail").html('')
-        $("#qris").html('')
+    // GET BANK DETAIL PAYMENT BANK MANUAL DEPOSIT
+    $('#bank-id').change(function () {
+        var id = $(this).val();
         $.ajax({
-            type: 'GET',
-            url: '{{route('listPaymentChannels')}}',
-            dataType: 'json',
-            success: function(res) {
-                res.map((val, i) => {
-                    if (val.channel_category == 'VIRTUAL_ACCOUNT') {
-                        $("#virtual-account").append(`
-                            <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="form-check">
-                                        <input class="form-check-input" onchange="createVa('${val.channel_code}')" type="radio" name="payment_code" id="${val.channel_code}">
-                                        <img class="img-payment" src="{{asset('payment/${val.channel_code}.png')}}" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `)
-                    }
-
-                    if (val.channel_category == 'EWALLET') {
-                        $("#ewallet").append(`
-                            <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="form-check">
-                                        <input class="form-check-input" onchange="createChargeWallet('ID_${val.channel_code}')" type="radio" name="payment_code" id="${val.channel_code}">
-                                        <img class="img-payment" src="{{asset('payment/${val.channel_code}.png')}}" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `)
-                    }
-
-                    if (val.channel_category == 'RETAIL_OUTLET') {
-                        $("#retail").append(`
-                            <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="form-check">
-                                        <input class="form-check-input" onchange="createRetailPayment('${val.channel_code}')" type="radio" name="payment_code" id="${val.channel_code}">
-                                        <img class="img-payment" src="{{asset('payment/${val.channel_code}.png')}}" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `)
-                    }
-
-                    if (val.channel_category == 'QRIS') {
-                        $("#qris").append(`
-                            <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="form-check">
-                                        <input class="form-check-input" type="radio" onchange="createQrCode()" name="payment_code" id="${val.channel_code}">
-                                        <img class="img-payment" src="{{asset('payment/${val.channel_code}.png')}}" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `)
-                    }
-                })
-            },
-            error: function(res) {
-                alert('Terjadi Kesalahan. Harap Memuat Ulang Halaman Ini');
-            }
-        })
-    }
-
-    // DATE FORMAT
-    function formatDate(date) {
-        var hours = date.getHours();
-        var minutes = date.getMinutes();
-        var ampm = hours >= 12 ? 'pm' : 'am';
-        hours = hours % 12;
-        hours = hours ? hours : 12; // the hour '0' should be '12'
-        minutes = minutes < 10 ? '0'+minutes : minutes;
-        var strTime = hours + ':' + minutes + ' ' + ampm;
-        return date.getMonth()+1 + "/" + date.getDate() + "/" + date.getFullYear() + " " + strTime;
-    }
-
-    // ON CHANGE TO CREATE VA
-    function createVa(bankCode) {
-        var amount = $("#amount").val();
-        var userId = "{{Auth::id()}}"
-        var url = "{{route('createFixedVa', ':id')}}";
-        url = url.replace(':id', userId);
-        $("#button-buy").html(`
-                            <button id="buy_button" onclick="payCreateVa('${bankCode}','${amount}','${url}')" type="button" class="btn theme-btn">Submit</button> 
-                        `);
-        
-    }
-
-    // PROCESS TO PAY VA
-    function payCreateVa(bankCode, amount, url) {
-        $('#bank_details').html('');
-        var form = new FormData();
-        form.append('bank_code', bankCode);
-        form.append('amount', amount);
-        $.ajax({
-            type: 'POST',
-            url: url,
-            dataType: 'json',
-            processData: false,
-            contentType: false,
-            data: form,
-            success: function(res) {
+            url: "{{route('bankDetails')}}?val=" + id,
+            type: "get",
+            success: function (data) {
+                $('div.bank-details').html(data.data_genetare);
                 $('#r-side-img').hide();
-                $('#bank_details').html('');
-                $("#button-buy").html(`
-                            <button style="cursor: not-allowed;" disabled type="button" class="btn theme-btn">Submit</button> 
-                        `);
-                $(".form-check-input").prop('disabled', true);
-                $("#bank_details").append(`
-                    <h3 class="text-center">Bank Details</h3>
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <td>Transaction ID : </td>
-                                    <td>${res.external_id}</td>
-                                </tr>
-                                <tr>
-                                    <td>Bank Name : </td>
-                                    <td>${res.bank_code}</td>
-                                </tr>
-                                <tr>
-                                    <td>Account Name : </td>
-                                    <td>${res.name}</td>
-                                </tr>
-                                <tr>
-                                    <td>Virtual Account : </td>
-                                    <td>${res.account_number}</td>
-                                </tr>
-                                <tr>
-                                    <td>Topup Amount : </td>
-                                    <td>${formatRupiah(String(res.expected_amount), 'Rp. ')}</td>
-                                </tr>
-                                <tr>
-                                    <td>Expired : </td>
-                                    <td>${formatDate(new Date(res.expiration_date))}</td>
-                                </tr>
-                            </tbody>
-                            
-                        </table>
-                `)
             },
-            error: function(err) {
-                alert('Harap Mengisi Jumlah Topup');
+            error: function (jqXHR, textStatus, errorThrown) {
+
             }
-        })
-    }
-
-    // ON CHANGE E WALLET PAYMENT
-    function createChargeWallet(walletChannel) {
-        var userId = "{{Auth::id()}}"
-        var url = "{{route('createEwalletCharge', ':id')}}";
-        url = url.replace(':id', userId);
-        if (walletChannel == 'ID_OVO') {
-            $("#button-buy").html(`
-                            <button id="buy_button" data-toggle="modal" data-target="#ovo-modal" type="button" class="btn theme-btn">Submit</button> 
-                        `);
-        } else {
-            $("#button-buy").html(`
-                            <button id="buy_button" onclick="payChargeEwallet('${walletChannel}','${url}')" type="button" class="btn theme-btn">Submit</button> 
-                        `);
-        }
-        
-    }
-
-    // Process to pay e wallet
-    function payChargeEwallet(walletChannel, url) {
-        $('#bank_details').html('');
-        var amount = $("#amount").val();
-        var form = new FormData();
-        form.append('channelCode', walletChannel);
-        form.append('amount', amount);
-
-        if (walletChannel == 'ID_OVO') {
-            var phone = $("#ovo_number").val();
-            form.append('phone_number',`+62${phone}`);
-        }
-
-        $.ajax({
-            type: 'POST',
-            url: url,
-            dataType: 'json',
-            processData: false,
-            contentType: false,
-            data: form,
-            success: function(res) {
-                $("#button-buy").html(`
-                            <button style="cursor: not-allowed;" disabled type="button" class="btn theme-btn">Submit</button> 
-                        `);
-                $(".form-check-input").prop('disabled', true);
-                $('#bank_details').html('');
-                $('#r-side-img').hide();
-
-
-                if (walletChannel == 'ID_OVO') {
-                    $("#ovo-modal").modal('hide');
-                    $("#ovo-modal-invoice").modal('show');
-                    $("#trans_id").text(res.reference_id);
-                    $("#ovo_number").text(`+62${phone}`);
-                    $("#total_ovo").text(res.charge_amount);
-                    $("#status_ovo").text(res.status);
-                    setInterval(eventCallbackEwallet(res.id), 3000);
-                } else {
-                    $("#bank_details").append(`
-                    <h3 class="text-center">Payment Details</h3>
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <td>Transaction ID : </td>
-                                    <td>${res.reference_id}</td>
-                                </tr>
-                                <tr>
-                                    <td>Wallet Name : </td>
-                                    <td>${res.channel_code == 'ID_DANA' ? 'DANA' : 'LINK AJA'}</td>
-                                </tr>
-                                <tr>
-                                    <td>Topup Amount : </td>
-                                    <td>${formatRupiah(String(res.capture_amount), 'Rp. ')}</td>
-                                </tr>
-                                <tr>
-                                    <td>Status : </td>
-                                    <td>${res.status}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="col-lg-12 col-md-8 col-sm-8">
-                            <a class="btn btn-primary text-white" onclick="redirectPage('${res.actions.mobile_web_checkout_url}')">Pay Here</a>
-                        </div>
-                    `)
-                }
-            },
-            error: function(res) {
-                alert('Harap Mengisi Jumlah Topup');
-            }
-        })
-    }
-
-    // REDIRECT TO PAYMENT EWALLET
-    function redirectPage(url)
-    {
-        window.open(url)
-        $("#wallet-modal-invoice").modal('show')
-    }
-
-
-    // CALLBACK PAY E WALLET WITH OVO
-    function eventCallbackEwallet(id)
-    {
-        var form = new FormData();
-        form.append('id', id);
-        $.ajax({
-            type: 'POST',
-            url: "{{ route('ewallet.status')}}",
-            data: form,
-            processData: false,
-            contentType: false,
-            success: function(res) {
-                alert('Pembayaran BERHASIL. Klik OKE untuk melanjutkan')
-                window.location.reload();
-            },
-            error: function(err) {
-                alert('Pembayaran GAGAl. Klik OKE untuk melanjutkan');
-            }
-        })
-    }
-
-    // Create retail payment
-    function createRetailPayment(retail) {
-        $("#button-buy").html('');
-        var userId = "{{Auth::id()}}"
-        var url = "{{route('createRetailPayment', ':id')}}";
-        url = url.replace(':id', userId);
-        $("#button-buy").html(`
-                        <button id="buy_button" onclick="processRetailPayment('${retail}','${url}')" type="button" class="btn theme-btn">Submit</button> 
-                    `);
-    }
-
-    // PROCESS PAY RETAIL PAYMENT
-    function processRetailPayment(retail, url) {
-        $('#bank_details').html('');
-        var amount = $("#amount").val();
-        var form = new FormData();
-        form.append('retail_name', retail);
-        form.append('amount', amount);
-        $.ajax({
-            type: 'POST',
-            url: url,
-            dataType: 'json',
-            processData: false,
-            contentType: false,
-            data: form,
-            success: function(res) {
-                $('#r-side-img').hide();
-                $('#bank_details').html('');
-                $("#button-buy").html(`
-                            <button style="cursor: not-allowed;" disabled type="button" class="btn theme-btn">Submit</button> 
-                        `);
-                $(".form-check-input").prop('disabled', true);
-                $("#bank_details").append(`
-                    <div id="area-print-retail">
-                        <div class="row justify-content-center">
-                            <h3 class="text-center">Payment Details</h3>
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <td>Transaction ID : </td>
-                                            <td>${res.external_id}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Retail Name : </td>
-                                            <td>${res.retail_outlet_name}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Account Name : </td>
-                                            <td>${res.name}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Payment Code : </td>
-                                            <td>${res.payment_code}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Topup Amount : </td>
-                                            <td>${formatRupiah(String(res.expected_amount), 'Rp. ')}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Expired : </td>
-                                            <td>${formatDate(new Date(res.expiration_date))}</td>
-                                        </tr>
-                                    </tbody>
-                                    
-                                </table>
-                        </div>
-                        <div class="row justify-content-center mb-6">
-                            <div id="qr-code" class="col-lg-4 col-md-4 col-sm-4"></div>
-                        </div>
-                    </div>
-                    <div class="row justify-content-center">
-                        <div class="col-lg-12 col-md-8 col-sm-8" id="button-barcode-retail">
-                            
-                        </div>
-                    </div>
-                `);
-
-                if (res.retail_outlet_name == 'ALFAMART') {
-                    $("#button-barcode-retail").append(`
-                        <a class="btn btn-primary text-white" target="_blank" href="https://retail-outlet-barcode-dev.xendit.co/alfamart/${res.payment_code}">Download</a>
-                    `)
-                } else {
-                    $("#button-barcode-retail").append(`
-                        <a class="btn btn-primary text-white" onclick="downloadTemplate()">Download</a>
-                    `)
-                }
-                new QRCode(document.getElementById("qr-code"), {
-                    text: `'${res.payment_code}'`,
-                    width: 250,
-                    height: 250,
-                });
-                
-            },
-            error: function(err) {
-                alert('Harap Mengisi Jumlah Topup');
-            }
-        })
-    }
-
-    // Download QR Retail Indomaret
-    function downloadTemplate() {
-        html2canvas(document.getElementById("area-print-retail"),		{
-                allowTaint: true,
-                useCORS: true
-            }).then(function (canvas) {
-                var anchorTag = document.createElement("a");
-                document.body.appendChild(anchorTag);
-                anchorTag.download = "qrCode.jpg";
-                anchorTag.href = canvas.toDataURL();
-                anchorTag.target = '_blank';
-                anchorTag.click();
-            });
-    }
-
-    // Create QR Code
-    function createQrCode() {
-        $("#button-buy").html('');
-        var userId = "{{Auth::id()}}"
-        var url = "{{route('qrCodePayment', ':id')}}";
-        url = url.replace(':id', userId)
-        $("#button-buy").html(`
-                        <button id="buy_button" onclick="processQrPayment('${url}')" type="button" class="btn theme-btn">Submit</button> 
-                    `);
-    }
-
-    // process qris
-    function processQrPayment(url) {
-        var amount = $("#amount").val();
-        var form = new FormData();
-        form.append('amount', amount);
-        $.ajax({
-            type: 'POST',
-            url: url,
-            dataType: 'json',
-            processData: false,
-            contentType: false,
-            data: form,
-            success: function(res) {
-                $('#r-side-img').hide();
-                $('#bank_details').html('');
-                $("#button-buy").html(`
-                            <button style="cursor: not-allowed;" disabled type="button" class="btn theme-btn">Submit</button> 
-                        `);
-                $(".form-check-input").prop('disabled', true);
-                $("#bank_details").append(`
-                    <div id="area-print-retail">
-                        <div class="row justify-content-center">
-                            <h3 class="text-center">Payment Details</h3>
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <td>Transaction ID : </td>
-                                            <td>${res.external_id}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Topup Amount : </td>
-                                            <td>${formatRupiah(String(res.amount), 'Rp. ')}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Status : </td>
-                                            <td>${res.status}</td>
-                                        </tr>
-                                    </tbody>
-                                    
-                                </table>
-                        </div>
-                        <div class="row justify-content-center mb-6">
-                            <div id="qr-code" class="col-lg-4 col-md-4 col-sm-4"></div>
-                        </div>
-                    </div>
-                    <div class="row justify-content-center">
-                        <div class="col-lg-12 col-md-8 col-sm-8" id="button-barcode-qr">
-                            
-                        </div>
-                    </div>
-                `);
-
-                $("#button-barcode-qr").append(`
-                        <a class="btn btn-primary text-white" onclick="downloadTemplate()">Download</a>
-                    `)
-                new QRCode(document.getElementById("qr-code"), {
-                    text: `'${res.qr_string}'`,
-                    width: 250,
-                    height: 250,
-                });
-            },
-            error: function(err) {
-                alert('Harap Mengisi Total Topup')
-            }
-        })
-    }
+        });
+    });
 
     // GET BANK DETAIL PAYMENT BANK MANUAL DEPOSIT
     function getBank() {
@@ -842,16 +356,19 @@
         });
     }
 
+
     function bankProcess() {
         var bank = $("#bank_id option:selected").text();
         var bank_id = $("#bank_id").val();
         var amount = $("#amount").val();
+        var idr = $("#total_idr_dollar").val();
         var file = $("#file").prop('files')[0];
         var form = new FormData();
         form.append('bank_code', bank);
         form.append('bank_id',bank_id);
         form.append('amount', amount);
         form.append('sleep',file);
+        form.append('total_topup',idr);
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -871,5 +388,6 @@
             }
         })
     }
+
 </script>
 @endsection

@@ -212,6 +212,12 @@ class TopupHistoryController extends Controller
                 $html = "<button class='btn btn-primary' onclick='showBank(".$row->id.")' data-toggle='modal' data-target='#invoice-bank'>Detail</button>";
                 return $html;
             })
+            ->editColumn('idr', function($row) {
+                return 'Rp. '. number_format($row->total_topup, 0);
+            })
+            ->editColumn('dollar', function($row) {
+                return number_format($row->dollar_topup, 0).' $';
+            })
             ->editColumn('status', function($row) {
                 if ($row->status == 'PENDING') {
                     $html = "<span class='badge badge-warning'>Pending</span>";

@@ -24,13 +24,13 @@
                     <div class="col-lg-4 col-sm-4 col-md-4">
                         <div class="card text-white bg-info border-0" style="font-size: 20px">
                             <div class="card-body">
-                                <i class="fas fa-money-check"></i> Rp. {{number_format($wallets->balance, 0)}}
+                                <i class="fas fa-money-check"></i>{{__(' ')}}{{number_format($wallets->balance, 0)}}{{__(' ')}}$
                                 @if((empty($nid_back ) && empty($nid_front)) && empty($selfie) || (($nid_back->status == STATUS_PENDING) && ($nid_front->status == STATUS_PENDING) && ($selfie->status == STATUS_PENDING)) || (($nid_back->status == STATUS_REJECTED) && ($nid_front->status == STATUS_REJECTED) && ($selfie->status == STATUS_REJECTED)))
                                     <a onclick="alert('Harap Memverifikasi KYC Terlebih Dahulu')" class="btn" title="Topup" style="color: white"> <i class="fas fa-undo-alt"></i> </a>
 
                                 @else 
 
-                                    <a href="{{route('topup')}}" class="btn" title="Topup" style="color: white"> <i class="fas fa-undo-alt"></i> </a>
+                                    <a class="btn btn-primary" style="border-radius: 20px" href="{{route('topup')}}" class="btn" title="Topup" style="color: white"> Topup </a>
                                 @endif
                             </div>
                         </div>
@@ -43,6 +43,7 @@
         <div class="row">
             <div class="col-12">
                 <ul class="nav user-management-nav mb-3" id="pills-tab" role="tablist">
+                    @if(isset($settings['payment_method_xendit_payment_gateway']) && $settings['payment_method_xendit_payment_gateway'] == 1)
                     <li class="nav-item">
                         <a data-id="active_users" class="nav-link active" id="pills-va-tab" data-toggle="pill" href="#pills-va" role="tab" aria-controls="pills-va" aria-selected="true">
                             <span>{{__('Virtual Account')}}</span>
@@ -63,13 +64,15 @@
                             <span>{{__('QRIS')}}</span>
                         </a>
                     </li>
+                    @endif
                     <li class="nav-item">
-                        <a data-id="bank_tab" class="nav-link" id="pills-bank-tab" data-toggle="pill" href="#pills-bank" role="tab" aria-controls="pills-bank" aria-selected="true">
+                        <a data-id="bank_tab" class="nav-link active" id="pills-bank-tab" data-toggle="pill" href="#pills-bank" role="tab" aria-controls="pills-bank" aria-selected="true">
                             {{__('Bank Deposit')}}
                         </a>
                     </li>
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
+                    @if(isset($settings['payment_method_xendit_payment_gateway']) && $settings['payment_method_xendit_payment_gateway'] == 1)
                     <div class="tab-pane show active" id="pills-va" role="tabpanel" aria-labelledby="pills-va-tab">
                         @include('user.pocket.partials.va-transaction')
                     </div>
@@ -82,7 +85,8 @@
                     <div class="tab-pane" id="pills-qris" role="tabpanel" aria-labelledby="pills-qris-tab">
                         @include('user.pocket.partials.qris-transaction')
                     </div>
-                    <div class="tab-pane" id="pills-bank" role="tabpanel" aria-labelledby="pills-bank-tab">
+                    @endif
+                    <div class="tab-pane active" id="pills-bank" role="tabpanel" aria-labelledby="pills-bank-tab">
                         @include('user.pocket.partials.bank-transaction')
                     </div>
                 </div>
@@ -478,7 +482,8 @@
             },
             columns: [
                     {"data": "external_id","orderable": true},
-                    {"data": "total_topup","orderable": true},
+                    {"data": "idr","orderable": true},
+                    {"data": "dollar","orderable": true},
                     {"data": "status","orderable": true},
                     {"data": "payment_merchant","orderable": true},
                     {"data": "virtual_account_number","orderable": false},

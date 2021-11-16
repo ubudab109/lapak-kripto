@@ -29,15 +29,16 @@ class WalletController extends Controller
     // my pocket
     public function myPocket()
     {   
-        $data['wallets'] = Wallet::where('user_id',Auth::id())->where('name','IDR')->first();
+        $data['wallets'] = Wallet::where('user_id',Auth::id())->where('name','DOLLAR')->first();
         $data['nid_front'] = VerificationDetails::where('user_id',Auth::id())->where('field_name','nid_front')->first();
         $data['nid_back'] = VerificationDetails::where('user_id',Auth::id())->where('field_name','nid_back')->first();
         $data['selfie'] = VerificationDetails::where('user_id',Auth::id())->where('field_name','selfie')->first();
         // dd($data);
+        $data['settings'] = allsetting();
         $data['title'] = __('My Pocket');
         return view('user.pocket.index',$data);
     }
-
+    
     // Top up IDR
     public function topup()
     {
@@ -63,7 +64,8 @@ class WalletController extends Controller
                 'external_id'               => 'LAPAK-TOPUP-'.time(),
                 'payment_type'              => BANK_DEPOSIT,
                 'payment_merchant'          => $request->bank_code,
-                'total_topup'               => $request->amount,
+                'dollar_topup'              => $request->amount,
+                'total_topup'               => $request->total_topup,
                 'virtual_account_number'    => $bank->bank_address,
                 'media'                     => uploadFile($request->file('sleep'), IMG_TOPUP_PATH),
                 'status'                    => 'PENDING',

@@ -88,7 +88,12 @@
                                       
                                 </div>
                                 <div class="form-group">
-                                    <label>{{__('IDR Amount')}}</label>
+                                    <label>{{__('Dollar Amount')}}</label>
+                                    <br>
+                                    @php
+                                        $balance = getUserBalance(Auth::id());
+                                    @endphp
+                                    <span style="color: green; font-weight: bolder;"> Alvailable Balance = {{number_format($balance['available_coin'],2)}} $ </span>
                                     <input type="hidden" name="" id="temp_price">
                                     <input onkeyup="keyupAmount(this.value)" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autocomplete="off" id="amount" name="idr_amount" class="form-control" placeholder="{{__('Your Amount')}}">
                                     <ul class="coin_price" style="color: green; font-weight: bolder;">
@@ -106,7 +111,7 @@
                                     <label for="">{{__('Total Coin')}}</label>
                                     <input type="text" name="total_coin" id="total_coin" readonly class="form-control">
                                 </div>
-                                <div class="cp-user-payment-type">
+                                <div class="cp-user-payment-type d-none">
                                     <h3>{{__('Payment Type')}}</h3>
                                     @if(isset($settings['payment_method_coin_payment']) && $settings['payment_method_coin_payment'] == 1)
                                         <div class="form-group">

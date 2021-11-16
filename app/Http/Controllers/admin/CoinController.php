@@ -132,7 +132,7 @@ class CoinController extends Controller
             try {
                 $transaction = BuyCoinHistory::where(['id' => $id, 'status' => STATUS_PENDING])->firstOrFail();
                 if ($transaction->type == BALANCE_IDR) {
-                    $primary = Wallet::where('user_id', $transaction->user_id)->where('name','IDR')->first();
+                    $primary = Wallet::where('user_id', $transaction->user_id)->where('name','DOLLAR')->first();
                     $primary->decrement('balance', $transaction->doller);
                 }
                 $transaction->transaction_id = $request->tx_id;

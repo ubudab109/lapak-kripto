@@ -32,7 +32,7 @@ class WalletNotifier extends Controller
         $merchant_id = '36f3c65d1922bfb5bd3d086020c16070';
         $secret = 'bRokOtok!09';
 
-        if (env('APP_ENV') != "local"){
+        if (env('APP_ENV') != "local") {
             if (!isset($_SERVER['HTTP_HMAC']) || empty($_SERVER['HTTP_HMAC'])) {
                 Log::info('No HMAC signature sent');
                 die("No HMAC signature sent");
@@ -312,7 +312,23 @@ class WalletNotifier extends Controller
         return response()->json($this->cb->GetAuthorization(), 200);
     }
 
+    public function getDollarKurs()
+    {
+        try {
 
+            $token = "ADxtMvoOcAApAtdylDcKwh8XObaUhcGRALyivjUr";
+            $bank = "mandiri";
+            $matauang = "usd";
+            $api = "https://api.kurs.web.id/api/v1/?token=$token&bank=$bank&matauang=$matauang";
+            $kurs = file_get_contents("$api");
+            $data = json_decode($kurs);
+    
+            return response()->json($data, 200);
+        } catch (\Exception $err) {
+            return response()->json($err->getMessage());
+        }
+
+    }
 
 
 }
