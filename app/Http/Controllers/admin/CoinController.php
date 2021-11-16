@@ -125,7 +125,7 @@ class CoinController extends Controller
             ]);
 
             if ($validate->fails()) {
-                return redirect()->back()->with('error', $validate->errors());
+                return redirect()->route('adminPendingCoinOrder')->with('error', $validate->errors());
             }
 
             DB::beginTransaction();
@@ -136,10 +136,10 @@ class CoinController extends Controller
                 $transaction->status = STATUS_SUCCESS;
                 $transaction->save();
                 DB::commit();
-                return redirect()->back()->with('success', 'Transaction accepted successfully');
+                return redirect()->route('adminPendingCoinOrder')->with('success', 'Transaction accepted successfully');
             } catch (\Exception $err) {
                 DB::rollBack();
-                return redirect()->back()->with('error', 'Transaction error. Please try again');
+                return redirect()->route('adminPendingCoinOrder')->with('error', 'Transaction error. Please try again');
 
             }
         
@@ -162,7 +162,7 @@ class CoinController extends Controller
             $transaction->status = STATUS_REJECTED;
             $transaction->update();
 
-            return redirect()->back()->with('success', 'Request cancelled successfully');
+            return redirect()->route('adminPendingCoinOrder')->with('success', 'Request cancelled successfully');
         }
     }
 
