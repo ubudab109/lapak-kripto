@@ -238,7 +238,7 @@ class CoinController extends Controller
         try {
             $wallet = Wallet::where('user_id',Auth::id())->first();
             if ($request->idr_amount > $wallet->balance) {
-                return redirect()->back()->with('success', "Insufficient Balance");
+                return redirect()->route('buyCoin')->with('success', "Insufficient Balance");
             } else {
                 BuyCoinHistory::create([
                     'type'          => BALANCE_IDR,
@@ -250,13 +250,13 @@ class CoinController extends Controller
                 ]);
                 $wallet->decrement('balance', $request->idr_amount);
                 DB::commit();
-                return redirect()->back()->with('success', "Request submitted successful,Please wait for admin approval");
+                return redirect()->route('buyCoin')->with('success', "Request submitted successful,Please wait for admin approval");
             }
     
 
         } catch (\Exception $err) {
             DB::rollBack();
-            return redirect()->back()->with('success', "Request Error,Please try again");
+            return redirect()->route('buyCoin')->with('success', "Request Error,Please try again");
         }
         
     }
