@@ -252,6 +252,10 @@
                                     <td id="rek_number"></td>
                                 </tr>
                                 <tr>
+                                    <td>Dolar Topup : </td>
+                                    <td id="topup_dollar"></td>
+                                </tr>
+                                <tr>
                                     <td>Topup Amount : </td>
                                     <td id="topup_bank"></td>
                                 </tr>
@@ -298,6 +302,22 @@
     
         rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
         return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+    }
+
+    function numberWithCommas(x) {
+        var	number_string = x.toString(),
+            split	= number_string.split('.'),
+            sisa 	= split[0].length % 3,
+            rupiah 	= split[0].substr(0, sisa),
+            ribuan 	= split[0].substr(sisa).match(/\d{1,3}/gi);
+                
+        if (ribuan) {
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+        rupiah = split[1] != undefined ? rupiah : rupiah;
+
+        return rupiah;
     }
 
     // DATE FORMAT
@@ -804,7 +824,8 @@
                 $("#id_bank").text(res.external_id);
                 $("#bank_name").text(res.payment_merchant);
                 $("#rek_number").text(res.virtual_account_number);
-                $("#topup_bank").text(formatRupiah(String(res.total_topup), 'Rp. '));
+                $("#topup_dollar").text(res.dollar_topup + ' $');
+                $("#topup_bank").text('Rp. ' + numberWithCommas(res.total_topup));
                 $("#status_bank").text(res.status);
                 $("#media_trans").html('')
                 $("#media_trans").append(`
