@@ -18,8 +18,8 @@
           <thead>
           <tr>
               <th scope="col" class="all">{{__('Transaction ID')}}</th>
-              <th scope="col" class="desktop">{{__('Dollar Amount')}}</th>
               <th scope="col" class="desktop">{{__('IDR Total')}}</th>
+              <th scope="col" class="desktop">{{__('Dollar Amount')}}</th>
               <th scope="col" class="all">{{__('Status')}}</th>
               <th scope="col" class="desktop">{{__('Merchant')}}</th>
               <th scope="col" class="desktop">{{__('Account Number')}}</th>
