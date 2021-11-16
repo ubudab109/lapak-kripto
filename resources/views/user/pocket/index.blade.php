@@ -24,7 +24,7 @@
                     <div class="col-lg-4 col-sm-4 col-md-4">
                         <div class="card text-white bg-info border-0" style="font-size: 20px">
                             <div class="card-body">
-                                <i class="fas fa-money-check"></i>{{__(' ')}}{{number_format($wallets->balance, 0)}}{{__(' ')}}$
+                                <i class="fas fa-money-check"></i>{{__(' ')}}{{number_format($wallets->balance, 2)}}{{__(' ')}}$
                                 @if((empty($nid_back ) && empty($nid_front)) && empty($selfie) || (($nid_back->status == STATUS_PENDING) && ($nid_front->status == STATUS_PENDING) && ($selfie->status == STATUS_PENDING)) || (($nid_back->status == STATUS_REJECTED) && ($nid_front->status == STATUS_REJECTED) && ($selfie->status == STATUS_REJECTED)))
                                     <a onclick="alert('Harap Memverifikasi KYC Terlebih Dahulu')" class="btn" title="Topup" style="color: white"> <i class="fas fa-undo-alt"></i> </a>
 

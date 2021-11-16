@@ -131,10 +131,7 @@ class CoinController extends Controller
             DB::beginTransaction();
             try {
                 $transaction = BuyCoinHistory::where(['id' => $id, 'status' => STATUS_PENDING])->firstOrFail();
-                if ($transaction->type == BALANCE_IDR) {
-                    $primary = Wallet::where('user_id', $transaction->user_id)->where('name','DOLLAR')->first();
-                    $primary->decrement('balance', $transaction->doller);
-                }
+
                 $transaction->transaction_id = $request->tx_id;
                 $transaction->status = STATUS_SUCCESS;
                 $transaction->save();
@@ -158,6 +155,10 @@ class CoinController extends Controller
                 return redirect()->back();
             }
             $transaction = BuyCoinHistory::where(['id' => $wdrl_id, 'status' => STATUS_PENDING])->firstOrFail();
+            if ($transaction->type == BALANCE_IDR) {
+                $primary = Wallet::where('user_id', $transaction->user_id)->where('name','DOLLAR')->first();
+                $primary->increment('balance', $transaction->doller);
+            }
             $transaction->status = STATUS_REJECTED;
             $transaction->update();
 

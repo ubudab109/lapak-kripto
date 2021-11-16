@@ -91,7 +91,7 @@ function byCoinType($input = null)
         CARD => __('CARD'),
         BTC => __('Coin Payment'),
         BANK_DEPOSIT => __('BANK DEPOSIT'),
-        BALANCE_IDR => __('Balance IDR'),
+        BALANCE_IDR => __('Dollar Balance'),
 
     ];
     if (is_null($input)) {

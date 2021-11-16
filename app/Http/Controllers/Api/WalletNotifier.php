@@ -289,7 +289,7 @@ class WalletNotifier extends Controller
 
     public function getPriceCoin($coin) {
         $client = new \GuzzleHttp\Client();
-        $response = $client->request('GET','https://api.nomics.com/v1/currencies/ticker?key=1f076926a7d2511fcdefbc5b41d26df4649852f1&ids='.$coin.'&interval=1d,30d&convert=IDR');
+        $response = $client->request('GET','https://api.nomics.com/v1/currencies/ticker?key=1f076926a7d2511fcdefbc5b41d26df4649852f1&ids='.$coin.'&interval=1d,30d&convert=USD');
         $body = $response->getBody()->getContents();
         $data['api_response'] = json_decode($body);
 
@@ -316,10 +316,7 @@ class WalletNotifier extends Controller
     {
         try {
 
-            $token = "ADxtMvoOcAApAtdylDcKwh8XObaUhcGRALyivjUr";
-            $bank = "mandiri";
-            $matauang = "usd";
-            $api = "https://api.kurs.web.id/api/v1/?token=$token&bank=$bank&matauang=$matauang";
+            $api = "https://v6.exchangerate-api.com/v6/f9df450e6a172f16c5ec3964/pair/USD/IDR";
             $kurs = file_get_contents("$api");
             $data = json_decode($kurs);
     

@@ -264,7 +264,7 @@
             url: "{{route('getDollarKurs')}}",
             dataType: 'json',
             success: function (res) {
-                // $("#dollar_buy").val(res.beli)
+                $("#dollar_buy").val(res.conversion_rate)
                 $("#loader").addClass('hide-loader');
             }, 
             error: function (res) {

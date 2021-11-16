@@ -64,7 +64,7 @@
               </div>
             </div>
           </div>
-        <div class="col-xl-6 mb-xl-0 mb-4">
+        <div class="col-xl-12 mb-xl-0 mb-4">
             <div class="card cp-user-custom-card">
                 <div class="card-body">
                     <div class="cp-user-card-header-area">
@@ -82,7 +82,7 @@
                                     <select class="form-control coin" onchange="getRates(this.value)" name="coin_name" id="coin_name" data-live-search="true" required>
                                         <option value="" selected disabled>Select Coin</option>
                                         @foreach ($wallets as $item)
-                                            <option value="{{$item['id']}}" data-name="{{$item['traded_currency_unit']}}">{{$item['traded_currency_unit']}}</option>
+                                            <option value="{{$item['traded_currency_unit']}}" data-name="{{$item['traded_currency_unit']}}">{{$item['traded_currency_unit']}}</option>
                                         @endforeach
                                     </select>
                                       
@@ -196,7 +196,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-6">
+        @if(isset($settings['payment_method_bank_deposit']) && $settings['payment_method_bank_deposit'] == 1)
+        <div class="col-xl-6 d-none">
             <div class="card cp-user-custom-card">
                 <div class="card-body">
                     <div class="cp-user-card-header-area">
@@ -212,6 +213,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 
 @endsection
@@ -225,6 +227,7 @@
         $("#buy_button").attr('disabled', true);
         $("#buy_button").css('cursor','not-allowed');
         $('.coin').selectpicker();
+        $("#amount").attr('disabled',true);
 
         function numberWithCommas(x) {
             var	number_string = x.toString(),
@@ -253,12 +256,14 @@
                 url: url,
                 dataType: 'json',
                 success: function(res) {
-                    var data = res.ticker;
+                    var data = res[0];
                     $("#coin_name_val").text(coin);
-                    $("#coint_val").text('Rp. ' + numberWithCommas(data.buy));
-                    $("#temp_price").val(data.buy);
+                    $("#coint_val").text(data.price + ' $');
+                    $("#temp_price").val(data.price);
                     $("#total_coin").val('');
                     $("#amount").val('');
+                    $("#amount").attr('disabled',false);
+
  
                 },
                 error: function(err) {
@@ -273,10 +278,11 @@
         {   
             var totalGet = '';
             var price = $("#temp_price").val();
-            if (val < 50000) {
-                $("#error_amount").text('Minimum Buy 50.000');
+            if (val == '') {
+                $("#error_amount").text('Total Amount Required');
                 $("#buy_button").attr('disabled', true);
                 $("#buy_button").css('cursor','not-allowed');
+                $("#total_coin").val('');
             } else {
                 $("#error_amount").text('');
                 $("#buy_button").attr('disabled', false);

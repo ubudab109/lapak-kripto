@@ -14,10 +14,10 @@
                         @foreach($api_response as $response)
                             @if($response['price_change_24h'] < 0)
                                 <li><i class="fa fa-arrow-down mr-2 text-danger"></i> <span
-                                        class="text-danger">Rp. {{number_format($response['current_price'], 0)}}</span> {{$response['name']}}</li>
+                                        class="text-danger">Rp. {{number_format($response['current_price'], 2)}}</span> {{$response['name']}}</li>
                             @else
                                 <li><i class="fa fa-arrow-up mr-2 text-success"></i> <span
-                                        class="text-success">Rp. {{number_format($response['current_price'], 0)}}</span> {{$response['name']}}</li>
+                                        class="text-success">Rp. {{number_format($response['current_price'], 2)}}</span> {{$response['name']}}</li>
                             @endif
                             @php
                                 $counter++
@@ -36,7 +36,7 @@
                     <div class="status-card-inner">
                         <div class="content">
                             <p>{{__('Available Balance')}}</p>
-                            <h3>Rp. {{number_format($balance['available_coin'],0)}} </h3>
+                            <h3>{{number_format($balance['available_coin'],2)}} $</h3>
                         </div>
                         <div class="icon">
                             <img src="{{asset('assets/user/images/status-icons/money.svg')}}" class="img-fluid" alt="">

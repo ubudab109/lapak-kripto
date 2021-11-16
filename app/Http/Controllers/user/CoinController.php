@@ -40,7 +40,7 @@ class CoinController extends Controller
     public function getRates($pair)
     {
         $client = new \GuzzleHttp\Client();
-        $response = $client->request('GET','https://indodax.com/api/ticker/'.$pair);
+        $response = $client->request('GET','https://api.nomics.com/v1/currencies/ticker?key=1f076926a7d2511fcdefbc5b41d26df4649852f1&ids='.$pair.'&interval=1d,30d&convert=USD');
         $body = $response->getBody()->getContents();
         return response()->json(json_decode($body, true));
     }
@@ -236,7 +236,10 @@ class CoinController extends Controller
     {
         DB::beginTransaction();
         try {
-            if ($request->payment_type == BALANCE_IDR) {
+            $wallet = Wallet::where('user_id',Auth::id())->first();
+            if ($request->idr_amount > $wallet->balance) {
+                return redirect()->back()->with('success', "Insufficient Balance");
+            } else {
                 BuyCoinHistory::create([
                     'type'          => BALANCE_IDR,
                     'address'       => $request->address,
@@ -245,25 +248,15 @@ class CoinController extends Controller
                     'coin'          => $request->total_coin,
                     'coin_type'     => $request->coin_name,
                 ]);
-            } else if ($request->payment_type == BANK_DEPOSIT) {
-                BuyCoinHistory::create([
-                    'type'          => BANK_DEPOSIT,
-                    'address'       => $request->address,
-                    'user_id'       => Auth::id(),
-                    'doller'        => $request->idr_amount,
-                    'coin'          => $request->total_coin,
-                    'coin_type'     => $request->coin_name,
-                    'bank_id'       => $request->bank_id,
-                    'bank_sleep'    => uploadFile($request->file('sleep'), IMG_SLEEP_PATH),
-                ]);
+                $wallet->decrement('balance', $request->idr_amount);
+                DB::commit();
+                return redirect()->back()->with('success', "Request submitted successful,Please wait for admin approval");
             }
     
-            DB::commit();
-            return redirect()->back()->with('success', "Request submitted successful,Please wait for admin approval");
 
         } catch (\Exception $err) {
             DB::rollBack();
-            return redirect()->back()->with('error', "Request Error,Please try again");
+            return redirect()->back()->with('success', "Request Error,Please try again");
         }
         
     }
