@@ -12,9 +12,6 @@
                         </a>
                         {{--                    <h2>{{__('Login')}}</h2>--}}
                         <p>{{__('Log into your account')}}</p>
-                        <div class="user-icon">
-                            <img src="{{asset('assets/img/user.svg')}}" alt="user icon">
-                        </div>
                     </div>
                     {{Form::open(['route' => 'loginProcess', 'files' => true])}}
                     <div class="form-group">
