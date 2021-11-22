@@ -193,13 +193,21 @@
                     </ul>
                 </li>
                 <li class="@if(isset($menu) && $menu == 'pocket' || isset($menu) && $menu == 'topup') cp-user-active-page @endif">
-                    <a href="{{route('myPocket')}}">
-                            <span class="cp-user-icon">
-                                <img src="{{asset('assets/user/images/sidebar-icons/Wallet.svg')}}" class="img-fluid cp-user-side-bar-icon" alt="">
-                                <img src="{{asset('assets/user/images/sidebar-icons/hover/Wallet.svg')}}" class="img-fluid cp-user-side-bar-icon-hover" alt="">
-                            </span>
-                        <span class="cp-user-name">{{__('My Pocket')}}</span>
+                    <a class="arrow-icon" href="#" aria-expanded="true">
+                        <span class="cp-user-icon">
+                            <img src="{{asset('assets/user/images/sidebar-icons/Wallet.svg')}}" class="img-fluid cp-user-side-bar-icon" alt="">
+                            <img src="{{asset('assets/user/images/sidebar-icons/hover/Wallet.svg')}}" class="img-fluid cp-user-side-bar-icon-hover" alt="">
+                        </span>
+                        <span class="cp-user-name">{{__('Wallet')}}</span>
                     </a>
+                    <ul class=" @if(isset($menu) && $menu == 'pocket') mm-show @endif">
+                        <li class="@if(isset($sub_menu) && $sub_menu == 'my_pocket' || isset($sub_menu) && $sub_menu == 'topup') cp-user-submenu-active @endif">
+                            <a href="{{route('myPocket')}}">{{__('My Pocket')}}</a>
+                        </li>
+                        <li class="@if(isset($sub_menu) && $sub_menu == 'withdraw') cp-user-submenu-active @endif">
+                            <a href="{{route('withdrawHistory')}}">{{__('Withdraw History')}}</a>
+                        </li>
+                    </ul>
                 </li>
                 {{-- <li class="@if(isset($menu) && $menu == 'member') cp-user-active-page mm-active  @endif">
                     <a class="arrow-icon" href="#" aria-expanded="true">
@@ -243,6 +251,9 @@
                     <ul class="@if(isset($menu) && $menu == 'setting')  mm-show  @endif">
                         <li class="@if(isset($sub_menu) && $sub_menu == 'setting') cp-user-submenu-active @endif">
                             <a href="{{route('userSetting')}}">{{__('My Settings')}}</a>
+                        </li>
+                        <li class="@if(isset($sub_menu) && $sub_menu == 'bank') cp-user-submenu-active @endif">
+                            <a href="{{route('bankSetting')}}">{{__('My Bank')}}</a>
                         </li>
                         <li class="@if(isset($sub_menu) && $sub_menu == 'faq') cp-user-submenu-active @endif">
                             <a href="{{route('userFaq')}}">{{__('FAQ')}}</a>

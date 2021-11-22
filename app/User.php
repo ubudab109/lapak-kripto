@@ -5,7 +5,9 @@ namespace App;
 use App\Model\AffiliationCode;
 use App\Model\BuyCoinHistory;
 use App\Model\TopupTransaction;
+use App\Model\UserBankInfo;
 use App\Model\UserCreditCard;
+use App\Model\WithdrawBalanceUser;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -62,5 +64,15 @@ class User extends Authenticatable
     public function buyCoin()
     {
         return $this->hasMany(BuyCoinHistory::class, 'user','id');
+    }
+
+    public function bank()
+    {
+        return $this->hasMany(UserBankInfo::class, 'user_id', 'id');
+    }
+
+    public function withdrawHistory()
+    {
+        return $this->hasMany(WithdrawBalanceUser::class, 'user_id', 'id');
     }
 }

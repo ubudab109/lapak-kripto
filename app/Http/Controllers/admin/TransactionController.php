@@ -10,7 +10,10 @@ use App\Repository\AffiliateRepository;
 use App\Services\CoinPaymentsAPI;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Model\WithdrawBalanceUser;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 use function foo\func;
 
 class TransactionController extends Controller
@@ -88,44 +91,87 @@ class TransactionController extends Controller
         return view('admin.transaction.all-transaction', $data);
     }
 
+    // Accep Withdraw Balance Version 2
+    public function acceptWithdraw(Request $request, $id)
+    {
+        $request->validate([
+            'admin_approval_picture' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $wdUser = WithdrawBalanceUser::find($id);
+            $wdUser->update([
+                'status'                    => STATUS_ACCEPTED,
+                'admin_approval_picture'    => uploadFile($request->file('admin_approval_picture'), IMG_WD_PATH),
+            ]);
+            DB::commit();
+            return redirect()->route('adminPendingWithdrawal')->with('success', __('Pending Withdrawal accepted Successfully!'));
+        } catch (\Exception $err) {
+            DB::rollBack();
+            return redirect()->route('adminPendingWithdrawal')->with('dismiss', __('Something went wrong! Please try again!'));
+        }
+    }
+
+    // Accep Withdraw Balance Version 2
+    public function rejectWithdraw($id)
+    {
+        DB::beginTransaction();
+        try {
+            $wdUser = WithdrawBalanceUser::where('transaction_id',$id)->first();;
+            $wdUser->update([
+                'status'                    => STATUS_REJECTED,
+            ]);
+            $walletUser = Wallet::where('user_id', $wdUser->user_id)->first();
+            $walletUser->increment('balance',$wdUser->dollar_amount);
+            DB::commit();
+            return redirect()->route('adminPendingWithdrawal')->with('success', __('Pending Withdrawal rejected Successfully!'));
+        } catch (\Exception $err) {
+            DB::rollBack();
+            return redirect()->route('adminPendingWithdrawal')->with('dismiss', __('Something went wrong! Please try again!'));
+        }
+    }
+
 
     // pending withdrawal list
     public function adminPendingWithdrawal(Request $request)
     {
         $data['title'] = __('Withdrawal');
         if ($request->ajax()) {
-            $withdrawal = WithdrawHistory::select(
-                'withdraw_histories.id',
-                'withdraw_histories.address'
-                , 'withdraw_histories.amount'
-                , 'withdraw_histories.fees'
-                , 'withdraw_histories.transaction_hash'
-                , 'withdraw_histories.confirmations'
-                , 'withdraw_histories.address_type as addr_type'
-                , 'withdraw_histories.updated_at'
-                , 'withdraw_histories.wallet_id as sender_wallet_id'
-                , 'withdraw_histories.receiver_wallet_id'
-            )->where(['withdraw_histories.status' => STATUS_PENDING]);
+            $withdrawal = WithdrawBalanceUser::where(['status' => STATUS_PENDING])->get();
 
             return datatables()->of($withdrawal)
-                ->addColumn('address_type', function ($wdrl) {
-                    return addressType($wdrl->addr_type);
+                ->editColumn('status',function($row) {
+                    $html = "<span class='badge ".status_badge($row->status)."'>".deposit_status($row->status)."</span>";
+                    return $html;
                 })
-                ->addColumn('sender', function ($wdrl) {
-                    return isset($wdrl->senderWallet->user) ? $wdrl->senderWallet->user->first_name . ' ' . $wdrl->senderWallet->user->last_name : '';
+                ->editColumn('media', function($row) {
+                    if ($row->admin_approval_picture != null) {
+                        $html = "<a href='#' data-toggle='modal' data-target='#receipt' onclick='showReceipt(".$row->admin_approval_picture.")'>Receipt from Admin</a>";
+                    } else {
+                        $html = "<span>Receipt is still Pending</span>";
+                    }
+                    return $html;
                 })
-                ->addColumn('receiver', function ($wdrl) {
-                    return isset($wdrl->receiverWallet->user) ? $wdrl->receiverWallet->user->first_name . ' ' . $wdrl->receiverWallet->user->last_name : '';
+                ->editColumn('bank', function($row) {
+                    $html = "<span>".$row->bankUser->bank_name." | ".$row->bankUser->account_holder_address." | ".$row->bankUser->account_holder_name."</span>";
+
+                    return $html;
+                    
+                })
+                ->editColumn('total_wd', function($row) {
+                    return 'Rp. '.number_format($row->total_wd, 0);
                 })
                 ->addColumn('actions', function ($wdrl) {
                     $action = '<ul>';
-                    $action .= accept_html('adminAcceptPendingWithdrawal',encrypt($wdrl->id));
-                    $action .= reject_html('adminRejectPendingWithdrawal',encrypt($wdrl->id));
+                    $action .= '<li class="deleteuser"><a title="Accept" href="#" onclick="openModalAccept('.$wdrl->id.')" data-toggle="modal" data-target="#accept_modal"><span class=""><i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                    </span></a> </li>';
+                    $action .= reject_wd_html($wdrl->transaction_id);
                     $action .= '<ul>';
 
                     return $action;
                 })
-                ->rawColumns(['actions'])
+                ->rawColumns(['actions','status','media','bank','total_wd'])
                 ->make(true);
         }
         return view('admin.transaction.pending-withdrawal', $data);
@@ -136,28 +182,26 @@ class TransactionController extends Controller
     {
         $data['title'] = __('Rejected Withdrawal');
         if ($request->ajax()) {
-            $withdrawal = WithdrawHistory::select(
-                'withdraw_histories.address'
-                , 'withdraw_histories.amount'
-                , 'withdraw_histories.fees'
-                , 'withdraw_histories.transaction_hash'
-                , 'withdraw_histories.confirmations'
-                , 'withdraw_histories.address_type as addr_type'
-                , 'withdraw_histories.updated_at'
-                , 'withdraw_histories.wallet_id as sender_wallet_id'
-                , 'withdraw_histories.receiver_wallet_id'
-            )->where(['withdraw_histories.status' => STATUS_REJECTED]);
+            $withdrawal = WithdrawBalanceUser::where(['status' => STATUS_REJECTED])->get();
 
             return datatables()->of($withdrawal)
-                ->addColumn('address_type', function ($wdrl) {
-                    return addressType($wdrl->addr_type);
+                ->editColumn('status',function($row) {
+                    $html = "<span class='badge ".status_badge($row->status)."'>".deposit_status($row->status)."</span>";
+                    return $html;
                 })
-                ->addColumn('sender', function ($wdrl) {
-                    return isset($wdrl->senderWallet->user) ? $wdrl->senderWallet->user->first_name . ' ' . $wdrl->senderWallet->user->last_name : '';
+                ->editColumn('media', function($row) {
+                    return 'Rejected';
                 })
-                ->addColumn('receiver', function ($wdrl) {
-                    return isset($wdrl->receiverWallet->user) ? $wdrl->receiverWallet->user->first_name . ' ' . $wdrl->receiverWallet->user->last_name : '';
+                ->editColumn('bank', function($row) {
+                    $html = "<span>".$row->bankUser->bank_name." | ".$row->bankUser->account_holder_address." | ".$row->bankUser->account_holder_name."</span>";
+
+                    return $html;
+                    
                 })
+                ->editColumn('total_wd', function($row) {
+                    return 'Rp. '.number_format($row->total_wd, 0);
+                })
+                ->rawColumns(['status','media','bank','total_wd'])
                 ->make(true);
         }
 
@@ -169,28 +213,31 @@ class TransactionController extends Controller
     {
         $data['title'] = __('Active Withdrawal');
         if ($request->ajax()) {
-            $withdrawal = WithdrawHistory::select(
-                'withdraw_histories.address'
-                , 'withdraw_histories.amount'
-                , 'withdraw_histories.fees'
-                , 'withdraw_histories.transaction_hash'
-                , 'withdraw_histories.confirmations'
-                , 'withdraw_histories.address_type as addr_type'
-                , 'withdraw_histories.updated_at'
-                , 'withdraw_histories.wallet_id as sender_wallet_id'
-                , 'withdraw_histories.receiver_wallet_id'
-            )->where(['withdraw_histories.status' => STATUS_SUCCESS]);
+            $withdrawal = WithdrawBalanceUser::where(['status' => STATUS_ACCEPTED])->get();
 
             return datatables()->of($withdrawal)
-                ->addColumn('address_type', function ($wdrl) {
-                    return addressType($wdrl->addr_type);
+                ->editColumn('status',function($row) {
+                    $html = "<span class='badge ".status_badge($row->status)."'>".deposit_status($row->status)."</span>";
+                    return $html;
                 })
-                ->addColumn('sender', function ($wdrl) {
-                    return isset($wdrl->senderWallet->user) ? $wdrl->senderWallet->user->first_name . ' ' . $wdrl->senderWallet->user->last_name : '';
+                ->editColumn('media', function($row) {
+                    if ($row->admin_approval_picture != null) {
+                        $html = "<a href='#' data-toggle='modal' data-target='#receipt' onclick='showReceipt(".$row->admin_approval_picture.")'>Receipt from Admin</a>";
+                    } else {
+                        $html = "<span>Receipt is still Pending</span>";
+                    }
+                    return $html;
                 })
-                ->addColumn('receiver', function ($wdrl) {
-                    return isset($wdrl->receiverWallet->user) ? $wdrl->receiverWallet->user->first_name . ' ' . $wdrl->receiverWallet->user->last_name : '';
+                ->editColumn('bank', function($row) {
+                    $html = "<span>".$row->bankUser->bank_name." | ".$row->bankUser->account_holder_address." | ".$row->bankUser->account_holder_name."</span>";
+
+                    return $html;
+                    
                 })
+                ->editColumn('total_wd', function($row) {
+                    return 'Rp. '.number_format($row->total_wd, 0);
+                })
+                ->rawColumns(['status','media','bank','total_wd'])
                 ->make(true);
         }
 
@@ -286,4 +333,6 @@ class TransactionController extends Controller
             return redirect()->back()->with('dismiss', __('Something went wrong! Please try again!'));
         }
     }
+
+   
 }

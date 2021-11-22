@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Cryptocash is Professional Creative Template" />
+<meta name="description" content="Lapak Kripto" />
 <!-- SITE TITLE -->
-<title>Cryptocash – ICO, Cryptocurrency Website & ICO Landing Page HTML + Dashboard Template</title>
+<title>Lapak Kripto</title>
 <!-- Favicon Icon -->
-<link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/favicon.png')}}">
+<link rel="shortcut icon" type="image/x-icon" href="{{show_image(1,'login_logo')}}">
 <!-- Animation CSS -->
 <link rel="stylesheet" href="{{asset('assets/css/animate.css')}}" >
 <!-- Latest Bootstrap min CSS -->
@@ -57,7 +57,6 @@
 		<nav class="navbar navbar-expand-lg"> 
 			<a class="navbar-brand page-scroll animation" href="#home_section" data-animation="fadeInDown" data-animation-delay="1s"> 
             	<img class="logo_light" src="{{show_image(1,'login_logo')}}" alt="logo" width="70"/> 
-                <img class="logo_light" src="{{show_image(1,'login_logo')}}" alt="logo" width="70"/> 
             </a>
             <button class="navbar-toggler animation" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" data-animation="fadeInDown" data-animation-delay="1.1s"> 
                 <span class="ion-android-menu"></span> 

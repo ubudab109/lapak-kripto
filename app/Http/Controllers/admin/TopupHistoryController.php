@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Services\CommonService;
 use App\Model\TopupTransaction;
 use App\Model\Wallet;
 use Carbon\Carbon;
@@ -23,6 +24,7 @@ class TopupHistoryController extends Controller
         try {
             $transaction = TopupTransaction::find($id);
             $wallet = Wallet::where('user_id', $transaction->user->id)->where('name','DOLLAR')->first();
+            $service = new CommonService();
             if ($request->status == 'COMPLETED') {
                 $transaction->update([
                     'status'    => 'COMPLETED',
@@ -33,6 +35,7 @@ class TopupHistoryController extends Controller
                     'status'    => 'FAILED',
                 ]);
             }
+            $service->sendNotificationOwn($transaction->user->id, 'Topup Verification','Your Topup With Transaction '.$transaction->external_id.' Has Been '.$request->status.'');
             DB::commit();
             return response()->json(true, 200);
         } catch (\Exception $err) {

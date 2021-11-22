@@ -484,6 +484,30 @@ class CommonService
         return $data;
     }
 
+    public function sendNotificationOwn($userId, $title, $body)
+    {
+        try {
+            Log::info('send notification start');
+            // $users = User::where(['status'=>STATUS_ACTIVE, 'role'=> USER_ROLE_USER])->get();
+            Notification::create(['user_id'=>$userId, 'title'=>$title, 'notification_body'=>$body]);
+            $data['success'] = true;
+            $data['user_id'] = $userId;
+            $data['message'] = $title;
+
+            $channel = 'usernotification_'.$userId;
+            $config = config('broadcasting.connections.pusher');
+            $pusher = new Pusher($config['key'], $config['secret'], $config['app_id'], $config['options']);
+
+            $pusher->trigger($channel , 'receive_notification', $data);
+            Log::info('send notification end');
+
+        } catch (\Exception $e) {
+            Log::info('send notification exception');
+            Log::info($e->getMessage());
+        }
+    }
+
+
     public function sendNotificationProcess($request)
     {
         try {

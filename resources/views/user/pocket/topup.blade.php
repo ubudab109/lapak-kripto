@@ -1,4 +1,4 @@
-@extends('user.master',['menu'=>'topup'])
+@extends('user.master',['menu'=>'pocket', 'sub_menu'=>'topup'])
 @section('title', isset($title) ? $title : '')
 @section('style')
 @endsection
@@ -26,7 +26,8 @@
                         <div class="cp-user-coin-info">
                             <form enctype="multipart/form-data" id="buy_coin">
                                 <div class="form-group">
-                                    <label>{{__('Dollar Amount')}}</label>
+                                    <label>{{__('Dollar Amount')}}</label> <br />
+                                    <span class="bade badge-success" id="dollar_rate"></span>
                                     <div class="input-group mb-3">
                                         <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autocomplete="off" id="amount" name="idr_amount" class="form-control" placeholder="{{__('Your Amount')}}">
                                         <div class="input-group-append">
@@ -42,6 +43,7 @@
                                     <label>{{__('Total Pay')}}</label>
                                     <input readonly type="hidden" id="total_idr_dollar" name="idr_total" class="form-control" />
                                     <input readonly type="text" id="total_idr_dollar_show" name="idr_total_show" class="form-control" />
+                                    <span class="bade badge-success">Admin Fee: {{$fees}}%</span>
                                 </div>
                                 
                                 <div class="cp-user-payment-type d-none" id="payment_type_channel">
@@ -257,22 +259,8 @@
 <script src="{{asset('assets/dropify/dropify.js')}}"></script>
 <script src="{{asset('assets/dropify/form-file-uploads.js')}}"></script>
 <script type="text/javascript">
-
-    $(document).ready(() => {
-        $.ajax({
-            type: 'GET',
-            url: "{{route('getDollarKurs')}}",
-            dataType: 'json',
-            success: function (res) {
-                $("#dollar_buy").val(res.conversion_rate)
-                $("#loader").addClass('hide-loader');
-            }, 
-            error: function (res) {
-                alert('Terjadi kesahalan, Mohon memuat ulang halaman ini')
-                window.location.reload();
-            }
-        });
-    });
+    var dollars = 0;
+    var totalIdr = 0;
 
     function numberWithCommas(x) {
         var	number_string = x.toString(),
@@ -290,23 +278,52 @@
         return rupiah;
     }
 
+
+    $(document).ready(() => {
+        $.ajax({
+            type: 'GET',
+            url: "{{route('getDollarKurs')}}",
+            dataType: 'json',
+            success: function (res) {
+                dollars += parseFloat(res.conversion_rate);
+                $("#dollar_rate").text('1$ = Rp. ' + numberWithCommas(res.conversion_rate))
+                $("#loader").addClass('hide-loader');
+            }, 
+            error: function (res) {
+                alert('Terjadi kesahalan, Mohon memuat ulang halaman ini')
+                window.location.reload();
+            }
+        });
+    });
+
+    
+
     $("#amount").on("keyup", () => {
-        var dollar = $("#dollar_buy").val();
+        var dollar = dollars;
+        var minimum = "{{$minimum}}";
         if ($("#amount").val() == '') {
             $(':button').prop('disabled', true); // Disable all the buttons
             $("#error_amount").text('Dollar Input is Required');
             $("#total_idr_dollar").val('')
             $("#total_idr_dollar_show").val('');
         } else {
-            $("#payment_type_channel").removeClass("d-none");
-            $(':button').prop('disabled', false); // Enable all the button
-            $("#error_amount").text('');
-            var dollarDepo = $("#amount").val();
-            var tempRupiah = dollarDepo * dollar;
-            var fee = tempRupiah * 0.1;
-            var total = tempRupiah + fee;
-            $("#total_idr_dollar").val(total)
-            $("#total_idr_dollar_show").val('Rp. ' + numberWithCommas(total));
+            if ($("#amount").val() < parseFloat(minimum)) {
+                $(':button').prop('disabled', true); // Disable all the buttons
+                $("#error_amount").text('Minimum Topup $' + minimum);
+                $("#total_idr_dollar").val('')
+                $("#total_idr_dollar_show").val('');
+            } else {
+                $("#payment_type_channel").removeClass("d-none");
+                $(':button').prop('disabled', false); // Enable all the button
+                $("#error_amount").text('');
+                var dollarDepo = $("#amount").val();
+                var tempRupiah = dollarDepo * dollar;
+                var fee = tempRupiah * 0.1;
+                var total = tempRupiah + fee;
+                totalIdr += total;
+                $("#total_idr_dollar_show").val('Rp. ' + numberWithCommas(total));
+                console.log(totalIdr);
+            }
 
         }
 
@@ -361,7 +378,7 @@
         var bank = $("#bank_id option:selected").text();
         var bank_id = $("#bank_id").val();
         var amount = $("#amount").val();
-        var idr = $("#total_idr_dollar").val();
+        var idr = totalIdr;
         var file = $("#file").prop('files')[0];
         var form = new FormData();
         form.append('bank_code', bank);

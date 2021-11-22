@@ -369,4 +369,37 @@ class SettingsController extends Controller
         }
         return response()->json(['message'=>__('Status changed successfully')]);
     }
+
+    // change topup status
+    public function changeTopupSetting(Request $request)
+    {
+        if ($request->post()) {
+            $rules = [
+                'topup_minimum' => 'required|numeric',
+                'topup_fee_percentage' => 'required|numeric',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                $errors = [];
+                $e = $validator->errors()->all();
+                foreach ($e as $error) {
+                    $errors[] = $error;
+                }
+                $data['message'] = $errors;
+                return redirect()->route('adminSettings', ['tab' => 'topup'])->with(['dismiss' => $errors[0]]);
+            }
+
+            try {
+                $response = $this->settingRepo->saveTopupSetting($request);
+                if ($response['success'] == true) {
+                    return redirect()->route('adminSettings', ['tab' => 'topup'])->with('success', $response['message']);
+                } else {
+                    return redirect()->route('adminSettings', ['tab' => 'topup'])->withInput()->with('success', $response['message']);
+                }
+            } catch(\Exception $e) {
+                return redirect()->back()->with(['dismiss' => $e->getMessage()]);
+            }
+        }
+    }
 }

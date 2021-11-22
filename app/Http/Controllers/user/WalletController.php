@@ -13,11 +13,15 @@ use App\Services\CoinPaymentsAPI;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Model\AdminSetting;
 use App\Model\Bank;
 use App\Model\TopupTransaction;
+use App\Model\UserBankInfo;
 use App\Model\VerificationDetails;
+use App\Model\WithdrawBalanceUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use PragmaRX\Google2FA\Google2FA;
 
@@ -44,6 +48,10 @@ class WalletController extends Controller
     {
         $data['settings'] = allsetting();
         $data['banks'] = Bank::where(['status' => STATUS_ACTIVE])->get();
+        $valFees = AdminSetting::where('slug','topup_fee_percentage')->first();
+        $data['value_fees'] = $valFees->value / 100;
+        $data['fees'] = $valFees->value;
+        $data['minimum'] = AdminSetting::where('slug','topup_minimum')->first()->value;
         return view('user.pocket.topup', $data);
     }
 
@@ -83,6 +91,98 @@ class WalletController extends Controller
 
     }
 
+    // Withdraw Form
+    public function withdraw()
+    {
+        $data['banks'] = UserBankInfo::where('user_id', Auth::id())->get();
+        $feesType = AdminSetting::where('slug','send_fees_type')->first();
+        if ($feesType->value == SEND_FEES_PERCENTAGE) {
+            $valFees = AdminSetting::where('slug','send_fees_percentage')->first();
+            $data['value_fees'] = $valFees->value / 100;
+        } else if ($feesType->value == SEND_FEES_FIXED) {
+            $valFees = AdminSetting::where('slug','send_fees_fixed')->first();
+            $data['value_fees'] = $valFees->value;
+        }
+        $data['fees'] = get_fees_wd($feesType->value, $valFees->value);
+        $data['max_wd'] = AdminSetting::where('slug','maximum_withdrawal_amount')->first()->value;
+        $data['min_wd'] = AdminSetting::where('slug','minimum_withdrawal_amount')->first()->value;
+        
+        
+        return view('user.pocket.withdraw', $data);
+    }
+
+    // Withdraw Process
+    public function withdrawProcess(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'bank_id'       => 'required|integer',
+            'total_wd'      => 'required',
+            'dollar_amount' => 'required',
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'message'  => 'Harap Periksa Semua Form'
+            ], 400);
+        }
+
+        DB::beginTransaction();
+        try {
+            $input = $request->all();
+            $input['user_id']           = Auth::id();
+            $input['transaction_id']    = 'LAPAK-WITHDRAW-'.time();
+            $user = Wallet::where('user_id', Auth::id())->first();
+            if ($input['dollar_amount'] > $user->balance) {
+                return response()->json([
+                    'message' => 'Balance Tidak Mencukupi'
+                ],400);
+            }
+            WithdrawBalanceUser::create($input);
+            $user->decrement('balance', $input['dollar_amount']);
+            DB::commit();
+            return response()->json(true,200);
+        } catch(\Exception $err) {
+            DB::rollBack();
+            return response()->json([
+                'message' => $err->getMessage().''.$err->getLine()
+            ], 500);
+        }
+    }
+
+
+    // Withdraw History
+    public function withdrawHistory(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = WithdrawBalanceUser::where('user_id', Auth::id())->get();
+            return datatables($data)
+            ->editColumn('status',function($row) {
+                $html = "<span class='badge ".status_badge($row->status)."'>".deposit_status($row->status)."</span>";
+                return $html;
+            })
+            ->editColumn('media', function($row) {
+                if ($row->admin_approval_picture != null) {
+                    $html = receipt_wd_html(imageSrc($row->admin_approval_picture,IMG_WD_PATH));
+                } else {
+                    $html = "<span>Receipt is still Pending</span>";
+                }
+                return $html;
+            })
+            ->editColumn('bank', function($row) {
+                $html = "<span>".$row->bankUser->bank_name." | ".$row->bankUser->account_holder_address." | ".$row->bankUser->account_holder_name."</span>";
+
+                return $html;
+                
+            })
+            ->editColumn('total_wd', function($row) {
+                return 'Rp. '.number_format($row->total_wd, 0);
+            })
+            ->rawColumns(['status','media','bank','total_wd'])
+            ->make(true);
+        }
+
+        return view('user.pocket.withdraw-history');
+    }
     
 
     // make default account

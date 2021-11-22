@@ -39,7 +39,7 @@
                             <a class="nav-link" id="pills-success-withdraw-tab" data-toggle="pill"
                                href="#pills-success-withdraw" role="tab" aria-controls="pills-success-withdraw"
                                aria-selected="true">
-                                {{__('Active Withdrawal List')}}
+                                {{__('Accepted Withdrawal List')}}
                             </a>
                         </li>
                     </ul>
@@ -50,19 +50,17 @@
                              aria-labelledby="pills-deposit-tab">
                             <div class="table-area">
                                 <div class="table-responsive">
-                                    <table id="table" class="table table-borderless custom-table display text-left"
+                                    <table id="table" class="table table-borderless custom-table display text-center"
                                            width="100%">
                                         <thead>
                                         <tr>
-                                            <th class="all">{{__('Type')}}</th>
-                                            <th class="all">{{__('Sender')}}</th>
-                                            <th class="all">{{__('Address')}}</th>
-                                            <th class="all">{{__('Receiver')}}</th>
-                                            <th class="all">{{__('Amount')}}</th>
-                                            <th class="all">{{__('Fees')}}</th>
-                                            <th class="all">{{__('Transaction Id')}}</th>
-                                            <th class="all">{{__('Update Date')}}</th>
-                                            <th class="all">{{__('Actions')}}</th>
+                                            <th scope="col" class="all">{{__('Transaction ID')}}</th>
+                                            <th scope="col" class="all">{{__('Bank')}}</th>
+                                            <th scope="col" class="all">{{__('Status')}}</th>
+                                            <th scope="col" class="all">{{__('Dollar Amount')}}</th>
+                                            <th scope="col" class="all">{{__('Total Withdraw')}}</th>
+                                            <th scope="col" class="all">{{__('Receipt')}}</th>
+                                            <th scope="col" class="all">{{__('Actions')}}</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -79,14 +77,12 @@
                                            class="table table-borderless custom-table display text-left" width="100%">
                                         <thead>
                                         <tr>
-                                            <th class="all">{{__('Type')}}</th>
-                                            <th class="all">{{__('Sender')}}</th>
-                                            <th class="all">{{__('Address')}}</th>
-                                            <th class="all">{{__('Receiver')}}</th>
-                                            <th class="all">{{__('Amount')}}</th>
-                                            <th class="all">{{__('Fees')}}</th>
-                                            <th class="all">{{__('Transaction Id')}}</th>
-                                            <th class="all">{{__('Update Date')}}</th>
+                                            <th scope="col" class="all">{{__('Transaction ID')}}</th>
+                                            <th scope="col" class="all">{{__('Bank')}}</th>
+                                            <th scope="col" class="all">{{__('Status')}}</th>
+                                            <th scope="col" class="all">{{__('Dollar Amount')}}</th>
+                                            <th scope="col" class="all">{{__('Total Withdraw')}}</th>
+                                            <th scope="col" class="all">{{__('Receipt')}}</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -103,14 +99,12 @@
                                            class="table table-borderless custom-table display text-left" width="100%">
                                         <thead>
                                         <tr>
-                                            <th class="all">{{__('Type')}}</th>
-                                            <th class="all">{{__('Sender')}}</th>
-                                            <th class="all">{{__('Address')}}</th>
-                                            <th class="all">{{__('Receiver')}}</th>
-                                            <th class="all">{{__('Amount')}}</th>
-                                            <th class="all">{{__('Fees')}}</th>
-                                            <th class="all">{{__('Transaction Id')}}</th>
-                                            <th class="all">{{__('Update Date')}}</th>
+                                            <th scope="col" class="all">{{__('Transaction ID')}}</th>
+                                            <th scope="col" class="all">{{__('Bank')}}</th>
+                                            <th scope="col" class="all">{{__('Status')}}</th>
+                                            <th scope="col" class="all">{{__('Dollar Amount')}}</th>
+                                            <th scope="col" class="all">{{__('Total Withdraw')}}</th>
+                                            <th scope="col" class="all">{{__('Receipt')}}</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -121,6 +115,39 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="accept_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Accept Payment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-white">
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                        <div class="form-group buy_coin_address_input mt-4">
+                            <div class="uplode-catagory">
+                                <h5 class="modal-title" id="exampleModalLongTitle">{{__('Upload Proof of Transaction')}}</h5>
+                                <span></span>
+                            </div>
+                            <div id="file-upload" class="section-p">
+                                <input type="hidden" name="admin_approval_picture_id" value="">
+                                <input type="file" placeholder="0.00" name="admin_approval_picture" value="" id="file" ref="file" class="dropify" data-default-file="{{asset('assets/img/placeholder-image.png')}}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submit-wd">Submit</button>
+            </div>
             </div>
         </div>
     </div>
@@ -135,7 +162,6 @@
             pageLength: 25,
             responsive: false,
             ajax: '{{route('adminPendingWithdrawal')}}',
-            order: [7, 'desc'],
             autoWidth: false,
             language: {
                 paginate: {
@@ -144,14 +170,12 @@
                 }
             },
             columns: [
-                {"data": "address_type"},
-                {"data": "sender"},
-                {"data": "address"},
-                {"data": "receiver"},
-                {"data": "amount"},
-                {"data": "fees"},
-                {"data": "transaction_hash"},
-                {"data": "updated_at"},
+                {"data": "transaction_id","orderable": true},
+                {"data": "bank","orderable": false},
+                {"data": "status","orderable": true},
+                {"data": "dollar_amount","orderable": true},
+                {"data": "total_wd","orderable": false},
+                {"data": "media","orderable": false},
                 {"data": "actions"}
             ]
         });
@@ -163,7 +187,6 @@
             pageLength: 25,
             responsive: false,
             ajax: '{{route('adminRejectedWithdrawal')}}',
-            order: [7, 'desc'],
             autoWidth: false,
             language: {
                 paginate: {
@@ -172,14 +195,12 @@
                 }
             },
             columns: [
-                {"data": "address_type"},
-                {"data": "sender"},
-                {"data": "address"},
-                {"data": "receiver"},
-                {"data": "amount"},
-                {"data": "fees"},
-                {"data": "transaction_hash"},
-                {"data": "updated_at"},
+                {"data": "transaction_id","orderable": true},
+                {"data": "bank","orderable": false},
+                {"data": "status","orderable": true},
+                {"data": "dollar_amount","orderable": true},
+                {"data": "total_wd","orderable": false},
+                {"data": "media","orderable": false},
             ]
         });
     </script>
@@ -190,7 +211,6 @@
             pageLength: 25,
             responsive: false,
             ajax: '{{route('adminActiveWithdrawal')}}',
-            order: [7, 'desc'],
             autoWidth: false,
             language: {
                 paginate: {
@@ -199,15 +219,46 @@
                 }
             },
             columns: [
-                {"data": "address_type"},
-                {"data": "sender"},
-                {"data": "address"},
-                {"data": "receiver"},
-                {"data": "amount"},
-                {"data": "fees"},
-                {"data": "transaction_hash"},
-                {"data": "updated_at"},
+                {"data": "transaction_id","orderable": true},
+                {"data": "bank","orderable": false},
+                {"data": "status","orderable": true},
+                {"data": "dollar_amount","orderable": true},
+                {"data": "total_wd","orderable": false},
+                {"data": "media","orderable": false},
             ]
         });
+    </script>
+    <script>
+        function approveWd(id)
+        {   
+            var url = "{{route('acceptWithdraw', ':id')}}"
+            url = url.replace(':id', id)
+            var file = $("#file").prop('files')[0];
+            var form = new FormData();
+            form.append('admin_approval_picture',file);
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'POST',
+                url: url,
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                data: form,
+                success: function(res) {
+                    alert('Status Withdraw Berhasil Disetujui!');
+                    window.location.reload();
+                },
+                error: function(err) {
+                    alert('Harap Periksa Semua Form')
+                }
+            })
+        }
+        function openModalAccept(transId) {
+            $("#submit-wd").on('click', function() {
+                approveWd(transId)
+            })
+        }
     </script>
 @endsection

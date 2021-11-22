@@ -1,4 +1,4 @@
-@extends('user.master',['menu'=>'pocket'])
+@extends('user.master',['menu'=>'pocket', 'sub_menu'=>'my_pocket'])
 @section('title', isset($title) ? $title : '')
 @section('style')
 <style>
@@ -31,6 +31,7 @@
                                 @else 
 
                                     <a class="btn btn-primary" style="border-radius: 20px" href="{{route('topup')}}" class="btn" title="Topup" style="color: white"> Topup </a>
+                                    <a class="btn btn-secondary" style="border-radius: 20px" href="{{route('withdraw')}}" class="btn" title="Topup" style="color: white"> Withdraw </a>
                                 @endif
                             </div>
                         </div>

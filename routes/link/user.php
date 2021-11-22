@@ -11,7 +11,14 @@ Route::group(['prefix'=>'user','namespace'=>'user','middleware'=> ['auth','user'
     Route::post('driving-licence-upload', 'ProfileController@driveUpload')->name('driveUpload');
     Route::get('referral', 'ReferralController@myReferral')->name('myReferral');
     Route::get('setting', 'SettingController@userSetting')->name('userSetting');
+    Route::get('setting-bank', 'SettingController@bankSetting')->name('bankSetting');
+    Route::post('add-bank', 'SettingController@addNewBank')->name('addNewBank');
+    Route::post('update-bank/{id}', 'SettingController@updateBank')->name('updateBank');
+    Route::get('detail-bank/{id}', 'SettingController@detailBank')->name('detailBank');
     Route::get('my-pocket', 'WalletController@myPocket')->name('myPocket');
+    Route::get('withdraw', 'WalletController@withdraw')->name('withdraw');
+    Route::get('withdraw-history', 'WalletController@withdrawHistory')->name('withdrawHistory');
+    Route::post('withdraw-process', 'WalletController@withdrawProcess')->name('withdrawProcess');
 
     Route::post('g2f-secret-save', 'SettingController@g2fSecretSave')->name('g2fSecretSave');
     Route::post('google-login-enable', 'SettingController@googleLoginEnable')->name('googleLoginEnable');
@@ -32,6 +39,7 @@ Route::group(['prefix'=>'user','namespace'=>'user','middleware'=> ['auth','user'
     Route::get('buy-coin', 'CoinController@buyCoinPage')->name('buyCoin');
     Route::post('buy-coin-rate', 'CoinController@buyCoinRate')->name('buyCoinRate');
     Route::get('bank-details', 'CoinController@bankDetails')->name('bankDetails');
+    Route::get('bank-details-users', 'CoinController@bankDetailsUser')->name('bankDetailsUser');
     Route::post('buy-coin', 'CoinController@buyCoin')->name('buyCoinProcess');
     Route::post('buy-coins', 'CoinController@buyCoins')->name('buyCoinsProcess');
     Route::get('buy-coin-by-{address}', 'CoinController@buyCoinByAddress')->name('buyCoinByAddress');

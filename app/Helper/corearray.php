@@ -85,6 +85,20 @@ function deposit_status($input = null)
         return $output[$input];
     }
 }
+
+function status_badge($input = null) {
+    $output = [
+        STATUS_ACCEPTED => 'badge-success',
+        STATUS_PENDING => 'badge-warning',
+        STATUS_REJECTED => 'badge-danger',
+    ];
+    if (is_null($input)) {
+        return $output;
+    } else {
+        return $output[$input];
+    }
+}
+
 function byCoinType($input = null)
 {
     $output = [
@@ -100,6 +114,40 @@ function byCoinType($input = null)
         return $output[$input];
     }
 }
+
+function fees_wd($input = null) {
+    $output = [
+        SEND_FEES_FIXED => __('$'),
+        SEND_FEES_PERCENTAGE => __('%')
+    ];
+    if (is_null($input)) {
+        return $output;
+    } else {
+        return $output[$input];
+    }
+}
+
+function get_fees_wd($type, $value) {
+    return $value.''. fees_wd($type);
+}
+
+function get_fees_topup($value) {
+    return $value.'%';
+}
+
+function wd_fees_percent($currency, $percent) {
+    $fee = $currency * $percent;
+    $totalAmount = $currency - $fee;
+
+    return $totalAmount;
+}
+
+function wd_fees_fixed($currency, $fixed) {
+    $totalAmount = $currency - $fixed;
+
+    return $totalAmount;
+}
+
 
 function addressType($input = null){
     $output = [

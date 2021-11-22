@@ -40,6 +40,8 @@ Route::group(['prefix'=>'admin','namespace'=>'admin','middleware'=> ['auth','adm
     Route::get('rejected-withdrawal', 'TransactionController@adminRejectedWithdrawal')->name('adminRejectedWithdrawal');
     Route::get('active-withdrawal', 'TransactionController@adminActiveWithdrawal')->name('adminActiveWithdrawal');
     Route::get('accept-pending-withdrawal-{id}', 'TransactionController@adminAcceptPendingWithdrawal')->name('adminAcceptPendingWithdrawal');
+    Route::post('approve-pending-withdrawal-{id}', 'TransactionController@acceptWithdraw')->name('acceptWithdraw');
+    Route::get('declined-pending-withdrawal-{id}', 'TransactionController@rejectWithdraw')->name('rejectWithdraw');
     Route::get('reject-pending-withdrawal-{id}', 'TransactionController@adminRejectPendingWithdrawal')->name('adminRejectPendingWithdrawal');
 
     Route::get('banks', 'BankController@bankList')->name('bankList');
@@ -64,6 +66,7 @@ Route::group(['prefix'=>'admin','namespace'=>'admin','middleware'=> ['auth','adm
     Route::post('referral-fees-settings', 'SettingsController@adminReferralFeesSettings')->name('adminReferralFeesSettings');
     Route::post('withdrawal-settings', 'SettingsController@adminWithdrawalSettings')->name('adminWithdrawalSettings');
     Route::post('order-settings', 'SettingsController@adminOrderSettings')->name('adminOrderSettings');
+    Route::post('topup-settings', 'SettingsController@changeTopupSetting')->name('changeTopupSetting');
 
     Route::get('membership-coin-transaction-history', 'ClubController@coinTransactionHistory')->name('coinTransactionHistory');
     Route::get('membership-list', 'ClubController@membershipList')->name('membershipList');

@@ -69,6 +69,7 @@ const IMG_USER_VIEW_PATH = 'uploaded_file/users/';
 const IMG_SLEEP_VIEW_PATH = 'uploaded_file/sleep/';
 const IMG_USER_VERIFICATION_PATH = 'users/verifications/';
 const IMG_TOPUP_PATH = 'uploaded_file/topup/';
+const IMG_WD_PATH = 'uploaded_file/wd/';
 
 const DISCOUNT_TYPE_FIXED = 1;
 const DISCOUNT_TYPE_PERCENTAGE = 2;

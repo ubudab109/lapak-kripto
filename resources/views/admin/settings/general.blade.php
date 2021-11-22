@@ -63,6 +63,13 @@
                             <span>{{__('Payment Settings')}}</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="@if(isset($tab) && $tab=='topup') active @endif nav-link " id="pills-topup-tab"
+                           data-toggle="pill" data-controls="topup" href="#topup" role="tab"
+                           aria-controls="pills-topup" aria-selected="true">
+                            <span>{{__('Topup Settings')}}</span>
+                        </a>
+                    </li>
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane show @if(isset($tab) && $tab=='general')  active @endif" id="general"
@@ -482,6 +489,46 @@
                                 <div class="row">
                                     <div class="col-lg-2 col-12 mt-20">
                                         <button type="submit" class="button-primary theme-btn">{{__('Update')}}</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane @if(isset($tab) && $tab=='topup') show active @endif" id="topup"
+                         role="tabpanel" aria-labelledby="pills-deleted-user-tab">
+                        <div class="header-bar">
+                            <div class="table-title">
+                                <h3>{{__('Topup Settings')}}</h3>
+                            </div>
+                        </div>
+                        <div class="profile-info-form">
+                            <form method="post" action="{{route('changeTopupSetting')}}">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-lg-6 col-12 mt-20">
+                                        <div class="form-group">
+                                            <label for="#">{{__('Minimum Topup Amount')}}</label>
+                                            <input type="text" class="form-control" name="topup_minimum"
+                                                   placeholder="{{__('Minimum topup amount')}}"
+                                                   value="{{$settings['topup_minimum']}}">
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mt-20">
+                                        <div class="form-group">
+                                            <label for="#">{{__('Topup Fees Percent')}}</label>
+                                            <p class="fees-wrap">
+                                                <input class="form-control" type="text" name="topup_fee_percentage"
+                                                       placeholder="{{__('Currency Deposit Fees in Percent')}}"
+                                                       value="{{$settings['topup_fee_percentage']}}">
+                                                <span>%</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-2 col-12 mt-20">
+                                        <button type="submit" class="btn">{{__('Update')}}</button>
                                     </div>
                                 </div>
                             </form>

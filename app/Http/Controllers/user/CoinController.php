@@ -8,6 +8,7 @@ use App\Model\BuyCoinHistory;
 use App\Services\CoinPaymentsAPI;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Model\UserBankInfo;
 use App\Model\VerificationDetails;
 use App\Model\Wallet;
 use App\Model\WalletAddressHistory;
@@ -276,6 +277,28 @@ class CoinController extends Controller
                 $data_genetare .= '<tr><td>'.__("Country").' :</td> <td>'.country($bank->country).'</td></tr>';
                 $data_genetare .= '<tr><td>'.__("IBAN").' :</td> <td>'.$bank->iban.'</td></tr>';
                 $data_genetare .= '<tr><td>'.__("Swift Code").' :</td> <td>'.$bank->swift_code.'</td></tr>';
+                $data_genetare .= '</table>';
+                $data['data_genetare'] = $data_genetare;
+                $data['success'] = true;
+                $data['message'] = __('Data get successfully.');
+            }
+        }
+
+        return response()->json($data);
+    }
+
+    // Bank Detail User
+    public function bankDetailsUser(Request $request)
+    {
+        $data = ['success' => false, 'message' => __('Invalid request'), 'data_genetare'=> ''];
+        $data_genetare = '';
+        if(isset($request->val)) {
+            $bank = UserBankInfo::where('id', $request->val)->first();
+            if (isset($bank)) {
+                $data_genetare = '<h3 class="text-center">'.__('Bank Details').'</h3><table class="table">';
+                $data_genetare .= '<tr><td>'.__("Bank Name").' :</td> <td>'.$bank->bank_name.'</td></tr>';
+                $data_genetare .= '<tr><td>'.__("Account Holder Address").' :</td> <td>'.$bank->account_holder_address.'</td></tr>';
+                $data_genetare .= '<tr><td>'.__("Account Holder Name").' :</td> <td>'.$bank->account_holder_name.'</td></tr>';
                 $data_genetare .= '</table>';
                 $data['data_genetare'] = $data_genetare;
                 $data['success'] = true;

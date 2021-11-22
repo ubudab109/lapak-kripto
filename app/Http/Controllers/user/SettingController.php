@@ -5,8 +5,11 @@ namespace App\Http\Controllers\user;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Model\UserBankInfo;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use PragmaRX\Google2FA\Google2FA;
 
 class SettingController extends Controller
@@ -29,6 +32,86 @@ class SettingController extends Controller
         $data['qrcode'] = $google2fa_url;
 
         return view('user.setting.setting', $data);
+    }
+
+    // Bank User Setting
+    public function bankSetting(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = UserBankInfo::where('user_id', Auth::id())->get();
+            return datatables($data)
+            ->addColumn('action', function($row) {
+                $html = "<button class='btn btn-primary' onclick='detailBank(".$row->id.")' data-toggle='modal' data-target='#bank-update'>Edit</button>";
+                return $html;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+        }
+
+        return view('user.setting.bank');
+    }
+
+    // Add New Bank User
+    public function addNewBank(Request $request) 
+    {
+        DB::beginTransaction();
+        try {
+            
+            $validator = Validator::make($request->all(), [
+                'bank_name'                     => 'required',
+                'account_holder_address'        => 'required',
+                'account_holder_name'           => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->route('bankSetting')->with('success', $validator->errors());
+            }
+            $input = $request->all();
+            $input['user_id'] = Auth::id();
+            UserBankInfo::create($input);
+            DB::commit();
+            return redirect()->route('bankSetting')->with('success', "Bank Successfully Added");
+        } catch (\Exception $err) {
+            DB::rollBack();
+            return redirect()->route('bankSetting')->with('success', "Error, Please Try Again");
+        }
+    }
+
+    // Update Bank
+    public function updateBank(Request $request, $id) 
+    {
+        DB::beginTransaction();
+        try {
+            
+            $validator = Validator::make($request->all(), [
+                'bank_name'                     => 'required',
+                'account_holder_address'        => 'required',
+                'account_holder_name'           => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 404);
+            }
+
+            UserBankInfo::find($id)->update($request->all());
+            DB::commit();
+            return response()->json(true, 200);
+        } catch (\Exception $err) {
+            DB::rollBack();
+            return response()->json(false, 400);
+        }
+    }
+
+    // Detail bank
+    public function detailBank($id) 
+    {
+        try {
+            $bank = UserBankInfo::find($id);
+            DB::commit();
+            return response()->json($bank, 200);
+        } catch (\Exception $err) {
+            return response()->json(false, 400);
+        }
     }
 
     // google 2fa secret save

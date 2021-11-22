@@ -82,7 +82,7 @@ class ReferralController extends Controller
             }
         }
 
-        $data['url'] = url('') . '/referral-reg?ref_code=' . $data['user']->affiliate->code;
+        $data['url'] = url('') . '/apps/referral-reg?ref_code=' . $data['user']->affiliate->code;
 
         $maxReferralLevel = max_level();
         $referralQuery = $this->affiliateRepository->childrenReferralQuery($maxReferralLevel);

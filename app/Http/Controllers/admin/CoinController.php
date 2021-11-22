@@ -9,6 +9,7 @@ use App\Model\Wallet;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Services\CommonService;
 use App\Model\WalletAddressHistory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -127,7 +128,7 @@ class CoinController extends Controller
             if ($validate->fails()) {
                 return redirect()->route('adminPendingCoinOrder')->with('error', $validate->errors());
             }
-
+            $service = new CommonService();
             DB::beginTransaction();
             try {
                 $transaction = BuyCoinHistory::where(['id' => $id, 'status' => STATUS_PENDING])->firstOrFail();
@@ -135,6 +136,8 @@ class CoinController extends Controller
                 $transaction->transaction_id = $request->tx_id;
                 $transaction->status = STATUS_SUCCESS;
                 $transaction->save();
+
+                $service->sendNotificationOwn($transaction->user_id, 'Buy Coin Verification', 'Your '.$transaction->coin_type.' Coin Purchase has been verified');
                 DB::commit();
                 return redirect()->route('adminPendingCoinOrder')->with('success', 'Transaction accepted successfully');
             } catch (\Exception $err) {
@@ -161,6 +164,9 @@ class CoinController extends Controller
             }
             $transaction->status = STATUS_REJECTED;
             $transaction->update();
+
+            $service = new CommonService();
+            $service->sendNotificationOwn($transaction->user_id, 'Buy Coin Verification', 'Your '.$transaction->coin_type.' Coin Purchase has been declined. Your balance has been restored');
 
             return redirect()->route('adminPendingCoinOrder')->with('success', 'Request cancelled successfully');
         }

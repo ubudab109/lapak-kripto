@@ -1024,6 +1024,23 @@ function receipt_view_html($image_link)
     return $html;
 }
 
+function receipt_wd_html($image_link)
+{
+    $num = random_int(1111111111,9999999999999);
+    $html = '<div class="deleteuser"><a title="'.__('Bank receipt').'" href="#view_' . $num . '" data-toggle="modal">Invoice Admin</a> </div>';
+    $html .= '<div id="view_' . $num . '" class="modal fade delete" role="dialog">';
+    $html .= '<div class="modal-dialog modal-lg">';
+    $html .= '<div class="modal-content">';
+    $html .= '<div class="modal-header"><h6 class="modal-title">' . __('Bank receipt') . '</h6><button type="button" class="close" data-dismiss="modal">&times;</button></div>';
+    $html .= '<div class="modal-body"><img style="width: 100%; height: 100%;" src="'.$image_link.'" alt=""></div>';
+    $html .= '<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">' . __("Close") . '</button>';
+    $html .= '</div>';
+    $html .= '</div>';
+    $html .= '</div>';
+    $html .= '</div>';
+    return $html;
+}
+
 function delete_html($route, $id)
 {
     $html = '<li class="deleteuser"><a title="'.__('delete').'" href="#delete_' . decrypt($id) . '" data-toggle="modal"><span><img src="'.asset("assets/admin/images/user-management-icons/activity/delete-user.svg").'" class="img-fluid" alt=""></span></a> </li>';
@@ -1150,6 +1167,24 @@ function reject_html($route, $id)
     $html .= '<div class="modal-body"><p>' . __('Do you want to Reject ?') . '</p></div>';
     $html .= '<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">' . __("Close") . '</button>';
     $html .= '<a class="btn btn-danger" href="' . route($route, $id) . '">' . __('Confirm') . '</a>';
+    $html .= '</div>';
+    $html .= '</div>';
+    $html .= '</div>';
+    $html .= '</div>';
+    return $html;
+}
+
+function reject_wd_html($id)
+{
+    $html = '<li class="deleteuser"><a title="'.__('Reject').'" href="#reject_' . $id . '" data-toggle="modal"><span class=""><i class="fa fa-minus-square" aria-hidden="true"></i>
+    </span></a> </li>';
+    $html .= '<div id="reject_' . $id . '" class="modal fade delete" role="dialog">';
+    $html .= '<div class="modal-dialog modal-sm">';
+    $html .= '<div class="modal-content">';
+    $html .= '<div class="modal-header"><h6 class="modal-title">' . __('Reject') . '</h6><button type="button" class="close" data-dismiss="modal">&times;</button></div>';
+    $html .= '<div class="modal-body"><p>' . __('Do you want to Reject ?') . '</p></div>';
+    $html .= '<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">' . __("Close") . '</button>';
+    $html .= '<a class="btn btn-danger" href="' . route('rejectWithdraw', $id) . '">' . __('Confirm') . '</a>';
     $html .= '</div>';
     $html .= '</div>';
     $html .= '</div>';

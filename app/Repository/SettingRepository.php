@@ -216,12 +216,37 @@ class SettingRepository
             AdminSetting::updateOrCreate(['slug' => 'maximum_withdrawal_amount'], ['value' => $request->maximum_withdrawal_amount]);
             AdminSetting::updateOrCreate(['slug' => 'max_send_limit'], ['value' => $request->max_send_limit]);
             AdminSetting::updateOrCreate(['slug' => 'send_fees_type'], ['value' => $request->send_fees_type]);
-            AdminSetting::updateOrCreate(['slug' => 'send_fees_fixed'], ['value' => $request->send_fees_type]);
+            AdminSetting::updateOrCreate(['slug' => 'send_fees_fixed'], ['value' => $request->send_fees_fixed]);
             AdminSetting::updateOrCreate(['slug' => 'send_fees_percentage'], ['value' => $request->send_fees_percentage]);
 
             $response = [
                 'success' => true,
                 'message' => __('Withdrawal setting updated successfully')
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $response = [
+                'success' => false,
+                'message' => __('Something went wrong')
+            ];
+            return $response;
+        }
+        DB::commit();
+        return $response;
+    }
+
+    // save topup setting
+    public function saveTopupSetting($request)
+    {
+        $response = ['success' => false, 'message' => __('Invalid request')];
+        DB::beginTransaction();
+        try {
+            AdminSetting::updateOrCreate(['slug' => 'topup_minimum'], ['value' => $request->topup_minimum]);
+            AdminSetting::updateOrCreate(['slug' => 'topup_fee_percentage'], ['value' => $request->topup_fee_percentage]);
+
+            $response = [
+                'success' => true,
+                'message' => __('Topup setting updated successfully')
             ];
         } catch (\Exception $e) {
             DB::rollBack();
