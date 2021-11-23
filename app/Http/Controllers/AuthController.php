@@ -110,7 +110,7 @@ class AuthController extends Controller
             return redirect()->route('login')->with('success',__('Email send successful,please verify your email'));
 
         } else {
-            return redirect()->back()->with('dismiss',__('Something went wrong'));
+            return redirect()->route('signUp')->with('dismiss',__('Something went wrong'));
         }
     }
 
