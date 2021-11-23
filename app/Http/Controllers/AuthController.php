@@ -98,7 +98,7 @@ class AuthController extends Controller
             ]);
             if ($parentUserId > 0) {
                 $referralRepository = app(AffiliateRepository::class);
-                $createdReferral = $referralRepository->createReferralUser($user->id, $parentUserId);
+                $referralRepository->createReferralUser($user->id, $parentUserId);
             }
             DB::commit();
             // all good
@@ -175,34 +175,34 @@ class AuthController extends Controller
                         $data['success'] = false;
                         $data['message'] = __("Your account has been suspended. please contact support team to active again");
                         Auth::logout();
-                        return redirect()->back()->with('dismiss',$data['message']);
+                        return redirect()->route('login')->with('dismiss',$data['message']);
                     } elseif ($user->status == STATUS_DELETED) {
                         $data['success'] = false;
                         $data['message'] = __("Your account has been deleted. please contact support team to active again");
                         Auth::logout();
-                        return redirect()->back()->with('dismiss',$data['message']);
+                        return redirect()->route('login')->with('dismiss',$data['message']);
                     } elseif ($user->status == STATUS_PENDING) {
                         $data['success'] = false;
                         $data['message'] = __("Your account has been pending for admin approval. please contact support team to active again");
                         Auth::logout();
-                        return redirect()->back()->with('dismiss',$data['message']);
+                        return redirect()->route('login')->with('dismiss',$data['message']);
                     }
 
                 } else {
                     $data['success'] = false;
                     $data['message'] = __("Email or Password doesn't match");
-                    return redirect()->back()->with('dismiss',$data['message']);
+                    return redirect()->route('login')->with('dismiss',$data['message']);
                 }
             } else {
                 $data['success'] = false;
                 $data['message'] = __("You have no login access");
                 Auth::logout();
-                return redirect()->back()->with('dismiss',$data['message']);
+                return redirect()->route('login')->with('dismiss',$data['message']);
             }
         } else {
             $data['success'] = false;
             $data['message'] = __("You have no account,please register new account");
-            return redirect()->back()->with('dismiss',$data['message']);
+            return redirect()->route('login')->with('dismiss',$data['message']);
         }
     }
 
