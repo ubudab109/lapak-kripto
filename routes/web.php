@@ -22,7 +22,9 @@ Route::group(['middleware'=> 'installation'],function () {
         Route::post('sign-up-process', 'AuthController@signUpProcess')->name('signUpProcess');
         Route::post('login-process', 'AuthController@loginProcess')->name('loginProcess');
         Route::get('forgot-password', 'AuthController@forgotPassword')->name('forgotPassword');
-        Route::get('verify-email', 'AuthController@verifyEmailPost')->name('verifyWeb');
+        Route::get('resend-email', 'AuthController@resendVerification')->name('resendVerification');
+        Route::post('request-resend-email', 'AuthController@resendEmailVerification')->name('resendEmailVerification');
+        Route::post('verify-email', 'AuthController@verifyEmailPost')->name('verifyWeb');
         Route::get('reset-password', 'AuthController@resetPasswordPage')->name('resetPasswordPage');
         Route::post('send-forgot-mail', 'AuthController@sendForgotMail')->name('sendForgotMail');
         Route::post('reset-password-save-process', 'AuthController@resetPasswordSave')->name('resetPasswordSave');

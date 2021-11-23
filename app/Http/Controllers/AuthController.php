@@ -49,6 +49,12 @@ class AuthController extends Controller
         return view('auth.signup');
     }
 
+    // resend verification
+    public function resendVerification()
+    {
+        return view('auth.resend-verifiy-email');
+    }
+
     // forgot password
     public function forgotPassword()
     {
@@ -378,12 +384,37 @@ class AuthController extends Controller
         return redirect()->back()->with('dismiss',__('Code doesn\'t match'));
 
     }
+
+    // post resend verification email
+    public function resendEmailVerification(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'email' => 'required',
+                'g-recaptcha-response' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->route('resendVerification')->withInput()->with('dismiss', $validator->errors()->first());
+            }
+            $user = User::where(['email' => $request->email])->first();
+            $mail_key = $this->generate_email_verification_key();
+            if (!empty($user)){
+                $this->sendVerifyemail($user, $mail_key);
+                return redirect()->route('login')->with('success',__('Email send successful,please verify your email'));
+    
+            } else {
+                return redirect()->route('resendVerification')->with('dismiss',__('Email doesn\'t exists '));
+            }
+        } catch (\Exception $err) {
+            dd($err);
+        }
+    }
     // verify email
     //
     public function verifyEmailPost(Request $request)
     {
+        
         $user = User::where(['email' => $request->email])->first();
-
         if (!empty($user)) {
             $varify = UserVerificationCode::where(['user_id' => $user->id])
                 ->where('code', decrypt($request->token))
