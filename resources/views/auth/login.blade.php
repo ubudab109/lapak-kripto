@@ -44,6 +44,8 @@
                         </div>
                         <div class="text-right"><a href="{{route('forgotPassword')}}">{{__('Forgot Password?')}}</a>
                         </div>
+                        <div class="text-right"><a href="{{route('verifyWeb')}}">{{__('Send Email Verification')}}</a>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary nimmu-user-sibmit-button">{{__('Login')}}</button>
                     {!!  GoogleReCaptchaV2::render('captcha') !!}
