@@ -33,7 +33,7 @@ class CoinController extends Controller
             $data['selfie'] = VerificationDetails::where('user_id',Auth::id())->where('field_name','selfie')->first();
             return view('user.buy_coin.index',$data);
         } catch (\Exception $e) {
-            return redirect()->back();
+            return back();
         }
 
     }
@@ -322,7 +322,7 @@ class CoinController extends Controller
             $data['coinAddress'] = $coinAddress;
             return view('user.buy_coin.payment_success', $data);
         } else {
-            return redirect()->back()->with('dismiss', __('Address not found'));
+            return redirect()->route('buyCoin')->with('dismiss', __('Address not found'));
         }
     }
 

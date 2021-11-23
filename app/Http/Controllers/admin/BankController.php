@@ -110,7 +110,7 @@ class BankController extends Controller
                 return redirect()->route('bankList')->with('success', $response['message']);
             }
 
-            return redirect()->back()->withInput()->with('dismiss', $response['message']);
+            return redirect()->route('bankList')->withInput()->with('dismiss', $response['message']);
         }
         return redirect()->back();
     }
@@ -136,7 +136,7 @@ class BankController extends Controller
                 return redirect()->route('bankList')->with('success', $response['message']);
             }
 
-            return redirect()->back()->withInput()->with('dismiss', $response['message']);
+            return redirect()->route('bankList')->withInput()->with('dismiss', $response['message']);
         }
         return redirect()->back();
     }

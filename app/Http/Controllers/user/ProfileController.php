@@ -60,7 +60,7 @@ class ProfileController extends Controller
             if ($message == 'The file one has invalid image dimensions.')
                 $message =  __('Image size must be less than (height:500,width:500)');
 
-            return redirect()->back()->with('dismiss',$message);
+            return redirect()->route('userProfile')->with('dismiss',$message);
         }
         try {
             $img = Input::file('file_one');
@@ -71,12 +71,12 @@ class ProfileController extends Controller
                 $user = User::find($user_data->id);
                 $user->photo  = $photo;
                 $user->save();
-                return redirect()->back()->with('success',__('Profile picture uploaded successfully'));
+                return redirect()->route('userProfile')->with('success',__('Profile picture uploaded successfully'));
             } else {
-                return redirect()->back()->with('dismiss',__('Please input a image'));
+                return redirect()->route('userProfile')->with('dismiss',__('Please input a image'));
             }
         } catch (\Exception $e) {
-            return redirect()->back()->with('dismiss', $e->getMessage());
+            return redirect()->route('userProfile')->with('dismiss', $e->getMessage());
         }
 
     }
@@ -86,7 +86,7 @@ class ProfileController extends Controller
     public function userProfileUpdate(UserProfileUpdate $request)
     {
         if (strpos($request->phone, '+') !== false) {
-            return redirect()->back()->with('dismiss',__("Don't put plus sign with phone number"));
+            return redirect()->route('userProfile')->with('dismiss',__("Don't put plus sign with phone number"));
         }
         $data['first_name'] = $request->first_name;
         $data['last_name'] = $request->last_name;
@@ -100,7 +100,7 @@ class ProfileController extends Controller
         }
         $user->update($data);
 
-        return redirect()->back()->with('success',__('Profile updated successfully'));
+        return redirect()->route('userProfile')->with('success',__('Profile updated successfully'));
     }
 
     // send sms
@@ -121,13 +121,13 @@ class ProfileController extends Controller
                     $sendSms = app(SmsService::class)->send("+".$number, $text);
                 }
 
-                return redirect()->back()->with('success', __('We sent a verification code in your phone please input this code in this box.'));
+                return redirect()->route('userProfile')->with('success', __('We sent a verification code in your phone please input this code in this box.'));
             } catch (\Exception $exception) {
                 Cookie::queue(Cookie::forget('code'));
-                return redirect()->back()->with('dismiss', __('Please contact your system admin,Something went wrong.'));
+                return redirect()->route('userProfile')->with('dismiss', __('Please contact your system admin,Something went wrong.'));
             }
         } else {
-            return redirect()->back()->with('dismiss', 'you should add your phone number first.');
+            return redirect()->route('userProfile')->with('dismiss', 'you should add your phone number first.');
         }
     }
 
@@ -143,15 +143,15 @@ class ProfileController extends Controller
                     $user->save();
                     Cookie::queue(Cookie::forget('code'));
 
-                    return redirect()->back()->with('success',__('Phone verified successfully.'));
+                    return redirect()->route('userProfile')->with('success',__('Phone verified successfully.'));
                 } else {
-                    return redirect()->back()->with('dismiss',__('You entered wrong OTP.'));
+                    return redirect()->route('userProfile')->with('dismiss',__('You entered wrong OTP.'));
                 }
             } else {
-                return redirect()->back()->with('dismiss',__('Your OTP is expired.'));
+                return redirect()->route('userProfile')->with('dismiss',__('Your OTP is expired.'));
             }
         } else {
-            return redirect()->back()->with('dismiss',__("OTP can't be empty."));
+            return redirect()->route('userProfile')->with('dismiss',__("OTP can't be empty."));
         }
     }
 
@@ -287,9 +287,9 @@ class ProfileController extends Controller
         $service = new AuthService();
         $change = $service->changePassword($request);
         if ($change['success']) {
-            return redirect()->back()->with('success',$change['message']);
+            return redirect()->route('userProfile')->with('success',$change['message']);
         } else {
-            return redirect()->back()->with('dismiss',$change['message']);
+            return redirect()->route('userProfile')->with('dismiss',$change['message']);
         }
     }
 }

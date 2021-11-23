@@ -69,7 +69,7 @@ class UserController extends Controller
         DB::beginTransaction();
         try {
             if (!filter_var($request['email'], FILTER_VALIDATE_EMAIL)) {
-                return redirect()->back()->withInput()->with('dismiss', __('Invalid email address'));
+                return redirect()->route('adminUsers')->withInput()->with('dismiss', __('Invalid email address'));
             }
             $mail_key = $this->generate_email_verification_key();
             $user = User::create([
@@ -118,9 +118,9 @@ class UserController extends Controller
                 $data['success'] = true;
                 Session::put(['resend_email' => $user->email]);
 
-                return redirect()->back()->with('success', $data['message']);
+                return redirect()->route('adminUsers')->with('success', $data['message']);
             } catch (\Exception $e) {
-                return redirect()->back()->with('dismiss', __('New user created successfully but Mail not sent'));
+                return redirect()->route('adminUsers')->with('dismiss', __('New user created successfully but Mail not sent'));
             }
             // all good
         } catch (\Exception $e) {
@@ -141,7 +141,7 @@ class UserController extends Controller
             return redirect()->route('login')->with('success', __('Email send successful,please verify your email'));
 
         } else {
-            return redirect()->back()->with('dismiss', __('Something went wrong'));
+            return redirect()->route('adminUsers')->with('dismiss', __('Something went wrong'));
         }
     }
 
@@ -171,7 +171,7 @@ class UserController extends Controller
         $user = User::find(decrypt($id));
         $user->status = STATUS_DELETED;
         $user->save();
-        return redirect()->back()->with('success','User deleted successfully');
+        return redirect()->route('adminUsers')->with('success','User deleted successfully');
     }
 
     // suspend user
@@ -179,7 +179,7 @@ class UserController extends Controller
         $user = User::find(decrypt($id));
         $user->status = STATUS_SUSPENDED;
         $user->save();
-        return redirect()->back()->with('success','User suspended successfully');
+        return redirect()->route('adminUsers')->with('success','User suspended successfully');
     }
 
     // remove user gauth
@@ -188,7 +188,7 @@ class UserController extends Controller
         $user->google2fa_secret = '';
         $user->g2f_enabled  = '0';
         $user->save();
-        return redirect()->back()->with('success','User gauth removed successfully');
+        return redirect()->route('adminUsers')->with('success','User gauth removed successfully');
     }
 
     // activate user
@@ -196,7 +196,7 @@ class UserController extends Controller
         $user = User::find(decrypt($id));
         $user->status = STATUS_SUCCESS;
         $user->save();
-        return redirect()->back()->with('success','User activated successfully');
+        return redirect()->route('adminUsers')->with('success','User activated successfully');
     }
 
     // verify user email
@@ -204,7 +204,7 @@ class UserController extends Controller
         $user = User::find(decrypt($id));
         $user->is_verified = STATUS_SUCCESS;
         $user->save();
-        return redirect()->back()->with('success','Email verified successfully');
+        return redirect()->route('adminUsers')->with('success','Email verified successfully');
     }
 
     //ID Verification
@@ -292,7 +292,7 @@ class UserController extends Controller
             return redirect()->route('adminUserIdVerificationPending')->with('success',__('Rejected successfully'));
         } catch (\Exception $e) {
 //            return redirect()->back()->with('dismiss', $e->getMessage());
-            return redirect()->back()->with('dismiss',__('Something went wrong'));
+            return redirect()->route('adminUsers')->with('dismiss',__('Something went wrong'));
         }
 
     }
