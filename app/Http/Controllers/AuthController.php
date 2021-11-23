@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use PragmaRX\Google2FA\Google2FA;
 
 class AuthController extends Controller
@@ -61,12 +62,48 @@ class AuthController extends Controller
     }
 
     // sign up process with referral sign up
-    public function signUpProcess(RegisterUser $request)
+    public function signUpProcess(Request $request)
     {
+        $validator = Validator::make($request->all(),[
+            'first_name' => ['required', 'string', 'max:50'],
+            'last_name' => ['required', 'string', 'max:50'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' =>[
+                'required',
+                'strong_pass',
+                'min:8',             // must be at least 8 characters in length
+                'regex:/[a-z]/',      // must contain at least one lowercase letter
+                'regex:/[A-Z]/',      // must contain at least one uppercase letter
+                'regex:/[0-9]/',      // must contain at least one digit
+            ],
+            'password_confirmation' => 'required|min:8|same:password',
+        ], [
+            'first_name' => __('First name can not be empty'),
+            'phone.required' => __('Phone number name can not be empty'),
+            'phone.numeric' => __('Please enter a valid phone number'),
+            'last_name' => __('Last name can not be empty'),
+            'device_token.required' => __('Device token field can not be empty'),
+            'device_type.required' => __('device type field can not be empty'),
+            'password.required' => __('Password field can not be empty'),
+            'password_confirmation.required' => __('Confirm Password field can not be empty'),
+            'password.min' => __('Password length must be atleast 8 characters.'),
+            'password.regex' => __('Password must be consist of one uppercase, one lowercase and one number.'),
+            'password.strong_pass' => __('Password must be consist of one uppercase, one lowercase and one number.'),
+            'password_confirmation.min' => __('Confirm Password length must be atleast 8 characters.'),
+            'password_confirmation.same' => __('Password and confirm password doesn\'t match'),
+            'email.required' => __('Email field can not be empty'),
+            'email.unique' => __('Email Address already exists'),
+            'email.email' => __('Invalid email address')
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('signUp')->withInput()->with('dismiss', $validator->errors()->first());
+        }
+
         DB::beginTransaction();
         $parentUserId = 0;
         try {
-            if (!filter_var($request['email'], FILTER_VALIDATE_EMAIL)) {
+            if (!filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
                 return redirect()->route('signUp')->withInput()->with('dismiss', __('Invalid email address'));
             }
             if ($request->has('ref_code')) {
@@ -83,11 +120,11 @@ class AuthController extends Controller
         try {
             $mail_key = $this->generate_email_verification_key();
             $user = User::create([
-                'first_name' => $request['first_name'],
-                'last_name' => $request['last_name'],
-                'email' => $request['email'],
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
                 'role' => USER_ROLE_USER,
-                'password' => Hash::make($request['password']),
+                'password' => Hash::make($request->password),
             ]);
             UserVerificationCode::create(['user_id' => $user->id, 'code' => $mail_key, 'expired_at' => date('Y-m-d', strtotime('+15 days'))]);
 
@@ -162,13 +199,13 @@ class AuthController extends Controller
                                 $data['message'] = __('Your email is not verified yet. Please verify your mail.');
                                 Auth::logout();
 
-                                return redirect()->back()->with('dismiss',$data['message']);
+                                return redirect()->route('login')->with('dismiss',$data['message']);
                             } catch (\Exception $e) {
                                 $data['success'] = false;
                                 $data['message'] = $e->getMessage();
                                 Auth::logout();
 
-                                return redirect()->back()->with('dismiss',$data['message']);
+                                return redirect()->route('login')->with('dismiss',$data['message']);
                             }
                         }
                     } elseif ($user->status == STATUS_SUSPENDED) {
