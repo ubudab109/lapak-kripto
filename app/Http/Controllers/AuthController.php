@@ -398,6 +398,7 @@ class AuthController extends Controller
             }
             $user = User::where(['email' => $request->email])->first();
             $mail_key = $this->generate_email_verification_key();
+            UserVerificationCode::create(['user_id' => $user->id, 'code' => $mail_key, 'expired_at' => date('Y-m-d', strtotime('+15 days'))]);
             if (!empty($user)){
                 $this->sendVerifyemail($user, $mail_key);
                 return redirect()->route('login')->with('success',__('Email send successful,please verify your email'));
