@@ -5,6 +5,14 @@
 @section('content')
     <div class="row">
         <div class="col-12">
+            <div class="card-list">
+                <div class="alert alert-danger d-none error_msg" id="" role="alert">
+                </div>
+                <div class="alert alert-success d-none succ_msg" id="" role="alert">
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
 
             <ul class="nav cp-user-profile-nav" id="pills-tab" role="tablist">
                 <li class="nav-item">
@@ -160,11 +168,11 @@
                                             {{--                                                <span class="pending">{{statusAction($user->phone_verified)}}</span>--}}
                                             {{--                                            </li>--}}
 
-                                            <li>
+                                            {{-- <li>
                                                 <span>{{__('Role')}}</span>
                                                 <span class="cp-user-dot">:</span>
                                                 <span>{{userRole($user->role)}}</span>
-                                            </li>
+                                            </li> --}}
                                             <li>
                                                 <span>{{__('Active Status')}}</span>
                                                 <span class="cp-user-dot">:</span>
@@ -437,15 +445,6 @@
                         @csrf
                         <div class="container">
                             <div class="row">
-
-                                <div class="col-12">
-                                    <div class="card-list">
-                                        <div class="alert alert-danger d-none error_msg" id="" role="alert">
-                                        </div>
-                                        <div class="alert alert-success d-none succ_msg" id="" role="alert">
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="col-lg-4 mb-lg-0 mb-4">
                                     <div class="idcard">
                                         <h3 class="title">{{__('Front Side')}}</h3>
@@ -481,7 +480,7 @@
                                 <div class="col-lg-4 mb-lg-0 mb-4">
                                     <div class="idcard">
                                         <h3 class="title">{{__('Selfie')}}</h3>
-                                        @if((empty($nid_back ) && empty($nid_front)) && empty($selfie) || (($nid_back->status == STATUS_REJECTED) && ($nid_front->status == STATUS_REJECTED) && ($selfie->status == STATUS_REJECTED)))
+                                        @if((empty($nid_back ) && empty($nid_front)) && empty($selfie) || (($nid_back->status == STATUS_REJECTED) && ($nid_front->status == STATUS_REJECTED) && ($selfie->status == STATUS_REJECTED)) || (($nid_back->status == STATUS_PENDING) && ($nid_front->status == STATUS_PENDING) && ($selfie->status == STATUS_PENDING)))
                                             <input type="file" accept="image/x-png,image/jpeg" name="file_four"
                                                    id="file" ref="file" class="dropify"
                                                    @if(!empty($nid_back) && (!empty($nid_back->photo)) && (!empty($selfie->photo)))  data-default-file="{{asset(IMG_USER_VIEW_PATH.$selfie->photo)}}" @endif />
@@ -544,6 +543,7 @@
                             $(".succ_msg").fadeTo(2000, 500).slideUp(500, function () {
                                 $(".succ_msg").slideUp(500);
                             });
+                            $("#exampleModalCenter").modal('hide');
                         } else {
                             $('.error_msg').removeClass('d-none');
                             $('.error_msg').html(data.message);
@@ -551,6 +551,8 @@
                             $(".error_msg").fadeTo(2000, 500).slideUp(500, function () {
                                 $(".error_msg").slideUp(500);
                             });
+                            $("#exampleModalCenter").modal('hide');
+
                         }
                     }
                 });

@@ -71,7 +71,7 @@
                         <h4>{{__('Buy Our Coin From Here')}}</h4>
                     </div>
                     @if((empty($nid_back ) && empty($nid_front)) && empty($selfie) || (($nid_back->status == STATUS_PENDING) && ($nid_front->status == STATUS_PENDING) && ($selfie->status == STATUS_PENDING)) || (($nid_back->status == STATUS_REJECTED) && ($nid_front->status == STATUS_REJECTED) && ($selfie->status == STATUS_REJECTED)))
-                    <h4 class="mb-3" style="color: red">HARAP MEMVERIFIKASI KYC SEBELUM MELAKUKAN TRANSAKSI PEMBELIAN COIN</h4>
+                    <a href="{{route('userProfile')}}?qr=idvarification-tab" class="mb-3" style="color: red; font-size:20px;text-decoration: underline;"> Harap Verifikasi KYC Terlebih Dahulu Disini </a>
                     @endif
                     <div class="cp-user-buy-coin-content-area">
                         <div class="cp-user-coin-info">
