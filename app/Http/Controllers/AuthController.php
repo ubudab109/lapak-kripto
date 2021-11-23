@@ -70,11 +70,11 @@ class AuthController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' =>[
                 'required',
-                'strong_pass',
+                // 'strong_pass',
                 'min:8',             // must be at least 8 characters in length
-                // 'regex:/[a-z]/',      // must contain at least one lowercase letter
-                // 'regex:/[A-Z]/',      // must contain at least one uppercase letter
-                // 'regex:/[0-9]/',      // must contain at least one digit
+                'regex:/[a-z]/',      // must contain at least one lowercase letter
+                'regex:/[A-Z]/',      // must contain at least one uppercase letter
+                'regex:/[0-9]/',      // must contain at least one digit
             ],
             'password_confirmation' => 'required|min:8|same:password',
             'g-recaptcha-response' => 'required',
@@ -89,7 +89,7 @@ class AuthController extends Controller
             'password_confirmation.required' => __('Confirm Password field can not be empty'),
             'password.min' => __('Password length must be atleast 8 characters.'),
             'password.regex' => __('Password must be consist of one uppercase, one lowercase and one number.'),
-            'password.strong_pass' => __('Password must be consist of one uppercase, one lowercase and one number.'),
+            // 'password.strong_pass' => __('Password must be consist of one uppercase, one lowercase and one number.'),
             'password_confirmation.min' => __('Confirm Password length must be atleast 8 characters.'),
             'password_confirmation.same' => __('Password and confirm password doesn\'t match'),
             'email.required' => __('Email field can not be empty'),
