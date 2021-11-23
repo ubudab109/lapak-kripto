@@ -419,7 +419,7 @@ class AuthController extends Controller
             $varify = UserVerificationCode::where(['user_id' => $user->id])
                 ->where('code', decrypt($request->token))
                 ->where('status', STATUS_PENDING)
-                ->whereDate('expired_at', '>', Carbon::now()->format('Y-m-d'))
+                ->whereDate('expired_at', '>', Carbon::now())
                 ->first();
 
             if ($varify) {
