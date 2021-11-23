@@ -72,9 +72,9 @@ class AuthController extends Controller
                 'required',
                 'strong_pass',
                 'min:8',             // must be at least 8 characters in length
-                'regex:/[a-z]/',      // must contain at least one lowercase letter
-                'regex:/[A-Z]/',      // must contain at least one uppercase letter
-                'regex:/[0-9]/',      // must contain at least one digit
+                // 'regex:/[a-z]/',      // must contain at least one lowercase letter
+                // 'regex:/[A-Z]/',      // must contain at least one uppercase letter
+                // 'regex:/[0-9]/',      // must contain at least one digit
             ],
             'password_confirmation' => 'required|min:8|same:password',
             'g-recaptcha-response' => 'required',
