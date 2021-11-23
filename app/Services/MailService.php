@@ -53,7 +53,8 @@ class MailService
                 );
                 $message->from($this->defaultEmail, $this->defaultName);
             });
-           Session::flash('dismiss', 'Unavailable email service!');
+        }catch (\Exception $e){
+//            Session::flash('dismiss', 'Unavailable email service!');
         }
     }
 
