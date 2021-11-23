@@ -262,7 +262,6 @@ class AuthController extends Controller
         $data['data'] = $user;
         $data['key'] = $mail_key;
         $mailService->send('email.verifyWeb', $data, $userEmail, $userName, $subject);
-        dd($mailService);
     }
 
     // send token
