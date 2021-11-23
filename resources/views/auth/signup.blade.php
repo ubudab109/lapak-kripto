@@ -73,7 +73,9 @@
                         @if( app('request')->input('ref_code'))
                                 {{Form::hidden('ref_code', app('request')->input('ref_code') )}}
                         @endif
+                        <div id="captcha" class="form-group"></div>
                         <button type="submit" class="btn btn-primary nimmu-user-sibmit-button">{{__('Signup')}}</button>
+                        {!!  GoogleReCaptchaV2::render('captcha') !!}
                     {{ Form::close() }}
                     <div class="form-bottom text-center">
                         <p>{{__('Already have an account ?')}} <a href="{{route('login')}}">{{__('Return to Sign In')}}</a></p>

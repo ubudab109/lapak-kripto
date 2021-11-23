@@ -17,7 +17,9 @@
                         <label>{{__('Email address')}}</label>
                         <input type="email" name="email" class="form-control" placeholder="{{__('Your email here')}}">
                     </div>
+                    <div id="captcha" class="form-group"></div>
                     <button type="submit" class="btn btn-primary nimmu-user-sibmit-button">{{__('Send')}}</button>
+                    {!!  GoogleReCaptchaV2::render('captcha') !!}
                     {{ Form::close() }}
                     <div class="form-bottom text-center">
                         <p>{{__('Return to sign in')}} <a href="{{route('login')}}">{{__('Sign in')}}</a></p>

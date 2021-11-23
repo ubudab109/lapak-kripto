@@ -33,6 +33,7 @@
                         <span class="eye"><i class="fa fa-eye-slash toggle-password"
                                              onclick="showHidePassword('old_password')"></i></span>
                     </div>
+                    <div id="captcha" class="form-group"></div>
                     <div class="d-flex justify-content-between rememberme align-items-center mb-4">
                         <div>
                             <div class="form-group form-check mb-0">
@@ -45,6 +46,7 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary nimmu-user-sibmit-button">{{__('Login')}}</button>
+                    {!!  GoogleReCaptchaV2::render('captcha') !!}
                     {{Form::close()}}
                     <div class="form-bottom text-center">
                         {{--                    <h4 class="or">OR</h4>--}}

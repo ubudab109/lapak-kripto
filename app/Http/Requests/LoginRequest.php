@@ -25,7 +25,8 @@ class LoginRequest extends FormRequest
     {
         $rules = [
             'email' => 'required|email|exists:users,email',
-            'password' => 'required'
+            'password' => 'required',
+            'g-recaptcha-response' => 'required',
         ];
         return $rules;
     }
@@ -36,7 +37,8 @@ class LoginRequest extends FormRequest
             'email.required' => __("Email address can't empty"),
             'password.required' => __("Password can't empty"),
             'email.email' => __('Invalid email address.'),
-            'email.exists' => __('Email address doesn\'t exist.')
+            'email.exists' => __('Email address doesn\'t exist.'),
+            'g-recaptcha-response.required' => __('Please Pass Captcha'),
         ];
     }
 }

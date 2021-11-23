@@ -15,6 +15,7 @@ return array(
     'Whoops\\' => array($vendorDir . '/filp/whoops/src/Whoops'),
     'Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
     'Twilio\\' => array($vendorDir . '/twilio/sdk/src/Twilio'),
+    'TimeHunter\\LaravelGoogleReCaptchaV2\\' => array($vendorDir . '/timehunter/laravel-google-recaptcha-v2/src'),
     'TijsVerkoyen\\CssToInlineStyles\\' => array($vendorDir . '/tijsverkoyen/css-to-inline-styles/src'),
     'Themsaid\\LangmanGUI\\' => array($vendorDir . '/themsaid/laravel-langman-gui/src'),
     'Tests\\' => array($baseDir . '/tests'),

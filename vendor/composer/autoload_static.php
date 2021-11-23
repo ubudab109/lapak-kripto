@@ -18,13 +18,13 @@ class ComposerStaticInit7092d3d7c3c06b9468a993949da80d1d
         '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
         '972fda704d680a3a53c68e34e193cb22' => __DIR__ . '/..' . '/react/promise-timer/src/functions_include.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         'cea474b4340aa9fa53661e887a21a316' => __DIR__ . '/..' . '/react/promise-stream/src/functions_include.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
-        'def43f6c87e4f8dfd0c9e1b1bab14fe8' => __DIR__ . '/..' . '/symfony/polyfill-iconv/bootstrap.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        'def43f6c87e4f8dfd0c9e1b1bab14fe8' => __DIR__ . '/..' . '/symfony/polyfill-iconv/bootstrap.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         'cf97c57bfe0f23854afd2f3818abb7a0' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/create_uploaded_file.php',
         '9bf37a3d0dad93e29cb4e1b1bfab04e9' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/marshal_headers_from_sapi.php',
@@ -85,6 +85,7 @@ class ComposerStaticInit7092d3d7c3c06b9468a993949da80d1d
         'T' => 
         array (
             'Twilio\\' => 7,
+            'TimeHunter\\LaravelGoogleReCaptchaV2\\' => 36,
             'TijsVerkoyen\\CssToInlineStyles\\' => 31,
             'Themsaid\\LangmanGUI\\' => 20,
             'Tests\\' => 6,
@@ -280,6 +281,10 @@ class ComposerStaticInit7092d3d7c3c06b9468a993949da80d1d
         'Twilio\\' => 
         array (
             0 => __DIR__ . '/..' . '/twilio/sdk/src/Twilio',
+        ),
+        'TimeHunter\\LaravelGoogleReCaptchaV2\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/timehunter/laravel-google-recaptcha-v2/src',
         ),
         'TijsVerkoyen\\CssToInlineStyles\\' => 
         array (
@@ -1733,6 +1738,7 @@ class ComposerStaticInit7092d3d7c3c06b9468a993949da80d1d
         'Faker\\Provider\\nl_BE\\Payment' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Provider/nl_BE/Payment.php',
         'Faker\\Provider\\nl_BE\\Person' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Provider/nl_BE/Person.php',
         'Faker\\Provider\\nl_BE\\PhoneNumber' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Provider/nl_BE/PhoneNumber.php',
+        'Faker\\Provider\\nl_BE\\Text' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Provider/nl_BE/Text.php',
         'Faker\\Provider\\nl_NL\\Address' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Provider/nl_NL/Address.php',
         'Faker\\Provider\\nl_NL\\Color' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Provider/nl_NL/Color.php',
         'Faker\\Provider\\nl_NL\\Company' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Provider/nl_NL/Company.php',
@@ -6172,6 +6178,17 @@ class ComposerStaticInit7092d3d7c3c06b9468a993949da80d1d
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Property\\Property' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Property/Property.php',
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Processor' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Processor.php',
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Rule' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Rule.php',
+        'TimeHunter\\LaravelGoogleReCaptchaV2\\Configurations\\ReCaptchaConfigV2' => __DIR__ . '/..' . '/timehunter/laravel-google-recaptcha-v2/src/Configurations/ReCaptchaConfigV2.php',
+        'TimeHunter\\LaravelGoogleReCaptchaV2\\Core\\CurlRequestClient' => __DIR__ . '/..' . '/timehunter/laravel-google-recaptcha-v2/src/Core/CurlRequestClient.php',
+        'TimeHunter\\LaravelGoogleReCaptchaV2\\Core\\GoogleReCaptchaV2Response' => __DIR__ . '/..' . '/timehunter/laravel-google-recaptcha-v2/src/Core/GoogleReCaptchaV2Response.php',
+        'TimeHunter\\LaravelGoogleReCaptchaV2\\Core\\GuzzleRequestClient' => __DIR__ . '/..' . '/timehunter/laravel-google-recaptcha-v2/src/Core/GuzzleRequestClient.php',
+        'TimeHunter\\LaravelGoogleReCaptchaV2\\Facades\\GoogleReCaptchaV2' => __DIR__ . '/..' . '/timehunter/laravel-google-recaptcha-v2/src/Facades/GoogleReCaptchaV2.php',
+        'TimeHunter\\LaravelGoogleReCaptchaV2\\GoogleReCaptchaV2' => __DIR__ . '/..' . '/timehunter/laravel-google-recaptcha-v2/src/GoogleReCaptchaV2.php',
+        'TimeHunter\\LaravelGoogleReCaptchaV2\\Interfaces\\ReCaptchaConfigV2Interface' => __DIR__ . '/..' . '/timehunter/laravel-google-recaptcha-v2/src/Interfaces/ReCaptchaConfigV2Interface.php',
+        'TimeHunter\\LaravelGoogleReCaptchaV2\\Interfaces\\RequestClientInterface' => __DIR__ . '/..' . '/timehunter/laravel-google-recaptcha-v2/src/Interfaces/RequestClientInterface.php',
+        'TimeHunter\\LaravelGoogleReCaptchaV2\\Providers\\GoogleReCaptchaV2ServiceProvider' => __DIR__ . '/..' . '/timehunter/laravel-google-recaptcha-v2/src/Providers/GoogleReCaptchaV2ServiceProvider.php',
+        'TimeHunter\\LaravelGoogleReCaptchaV2\\Services\\GoogleReCaptchaV2Service' => __DIR__ . '/..' . '/timehunter/laravel-google-recaptcha-v2/src/Services/GoogleReCaptchaV2Service.php',
+        'TimeHunter\\LaravelGoogleReCaptchaV2\\Validations\\GoogleReCaptchaV2ValidationRule' => __DIR__ . '/..' . '/timehunter/laravel-google-recaptcha-v2/src/Validations/GoogleReCaptchaV2ValidationRule.php',
         'Twilio\\Deserialize' => __DIR__ . '/..' . '/twilio/sdk/src/Twilio/Deserialize.php',
         'Twilio\\Domain' => __DIR__ . '/..' . '/twilio/sdk/src/Twilio/Domain.php',
         'Twilio\\Exceptions\\ConfigurationException' => __DIR__ . '/..' . '/twilio/sdk/src/Twilio/Exceptions/ConfigurationException.php',

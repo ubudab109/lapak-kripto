@@ -35,7 +35,8 @@ class ResetPasswordSaveRequest extends FormRequest
                 'regex:/[A-Z]/',      // must contain at least one uppercase letter
                 'regex:/[0-9]/',      // must contain at least one digit
             ],
-            'password_confirmation' => 'required|min:8|same:password'
+            'password_confirmation' => 'required|min:8|same:password',
+            'g-recaptcha-response' => 'required',
         ];
 
         return $rules;
@@ -52,6 +53,7 @@ class ResetPasswordSaveRequest extends FormRequest
             'password_confirmation.required' => __('Confirm password can\'t be empty'),
             'password.min' => __('Password can\'t be less then 8 character'),
             'password_confirmation.same' =>__( 'Confirm password must be same as password'),
+            'g-recaptcha-response.required' => __('Please Pass Captcha'),
         ];
     }
 }

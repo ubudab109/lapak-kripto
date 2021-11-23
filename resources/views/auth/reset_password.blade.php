@@ -29,7 +29,9 @@
                         <label>{{__('Confirm Password')}}</label>
                         <input type="password" name="password_confirmation" class="form-control" placeholder="{{__('')}}">
                     </div>
+                    <div id="captcha" class="form-group"></div>
                     <button type="submit" class="btn btn-primary nimmu-user-sibmit-button">{{__('Submit')}}</button>
+                    {!!  GoogleReCaptchaV2::render('captcha') !!}
                 {{ Form::close() }}
                 <div class="form-bottom text-center">
                     <p>{{__('Return to sign in')}} <a href="{{route('login')}}">{{__('Sign in')}}</a></p>

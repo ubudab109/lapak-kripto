@@ -77,6 +77,7 @@ class AuthController extends Controller
                 'regex:/[0-9]/',      // must contain at least one digit
             ],
             'password_confirmation' => 'required|min:8|same:password',
+            'g-recaptcha-response' => 'required',
         ], [
             'first_name' => __('First name can not be empty'),
             'phone.required' => __('Phone number name can not be empty'),
@@ -93,7 +94,8 @@ class AuthController extends Controller
             'password_confirmation.same' => __('Password and confirm password doesn\'t match'),
             'email.required' => __('Email field can not be empty'),
             'email.unique' => __('Email Address already exists'),
-            'email.email' => __('Invalid email address')
+            'email.email' => __('Invalid email address'),
+            'g-recaptcha-response.required' => __('Please Pass Captcha'),
         ]);
 
         if ($validator->fails()) {
@@ -260,13 +262,9 @@ class AuthController extends Controller
 
     public function sendForgotMail(Request $request)
     {
-
-
-
-
-        $rules = ['email' => 'required|email'];
-        $messages = ['email.required' => __('Email field can not be empty'), 'email.email' => __('Email is invalid')];
-        $validatedData = $request->validate($rules,$messages);
+        $rules = ['email' => 'required|email','g-recaptcha-response' => 'required'];
+        $messages = ['email.required' => __('Email field can not be empty'), 'email.email' => __('Email is invalid'),'g-recaptcha-response.required' => __('Please Pass Captcha')];
+        $request->validate($rules,$messages);
         $user = User::where(['email' => $request->email])->first();
 
         if ($user) {

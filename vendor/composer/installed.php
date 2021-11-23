@@ -1,11 +1,11 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => NULL,
+        'reference' => '8e8db6fabd18ba4a718229ccae3a3605bbbc256c',
         'name' => 'laravel/laravel',
         'dev' => true,
     ),
@@ -524,12 +524,12 @@
             'dev_requirement' => false,
         ),
         'laravel/laravel' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => NULL,
+            'reference' => '8e8db6fabd18ba4a718229ccae3a3605bbbc256c',
             'dev_requirement' => false,
         ),
         'laravel/passport' => array(
@@ -1509,6 +1509,15 @@
             'install_path' => __DIR__ . '/../tijsverkoyen/css-to-inline-styles',
             'aliases' => array(),
             'reference' => 'b43b05cf43c1b6d849478965062b6ef73e223bb5',
+            'dev_requirement' => false,
+        ),
+        'timehunter/laravel-google-recaptcha-v2' => array(
+            'pretty_version' => '1.0.2',
+            'version' => '1.0.2.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../timehunter/laravel-google-recaptcha-v2',
+            'aliases' => array(),
+            'reference' => '0e0206f9d5843cd0bf6e571816c92f56e276a9b1',
             'dev_requirement' => false,
         ),
         'twilio/sdk' => array(
