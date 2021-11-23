@@ -67,7 +67,7 @@ class AuthController extends Controller
         $parentUserId = 0;
         try {
             if (!filter_var($request['email'], FILTER_VALIDATE_EMAIL)) {
-                return redirect()->back()->withInput()->with('dismiss', __('Invalid email address'));
+                return redirect()->route('signUp')->withInput()->with('dismiss', __('Invalid email address'));
             }
             if ($request->has('ref_code')) {
                 $parentUser = AffiliationCode::where('code', $request->ref_code)->first();
