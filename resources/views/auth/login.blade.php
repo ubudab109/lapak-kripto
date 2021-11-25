@@ -35,16 +35,10 @@
                     </div>
                     <div id="captcha" class="form-group"></div>
                     <div class="d-flex justify-content-between rememberme align-items-center mb-4">
-                        <div>
-                            <div class="form-group form-check mb-0">
-                                <input class="styled-checkbox form-check-input" id="styled-checkbox-1" type="checkbox"
-                                       value="value1">
-{{--                                <label for="styled-checkbox-1">{{__('Remember Me')}}</label>--}}
-                            </div>
+
+                        <div class="mr-3"><a href="{{route('forgotPassword')}}">{{__('Forgot Password?')}}</a>
                         </div>
-                        <div class="text-right"><a href="{{route('forgotPassword')}}">{{__('Forgot Password?')}}</a>
-                        </div>
-                        <div class="text-right"><a href="{{route('resendVerification')}}">{{__('Resend Email Verification')}}</a>
+                        <div class=""><a href="{{route('resendVerification')}}">{{__('Resend Email Verification')}}</a>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary nimmu-user-sibmit-button">{{__('Login')}}</button>
