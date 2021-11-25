@@ -26,7 +26,7 @@
     <!-- Responsive CSS -->
     <link rel="stylesheet" href="{{asset('assets/admin/css/responsive.css')}}">
     @yield('style')
-    <title>@yield('title') Cpockate</title>
+    <title>@yield('title')</title>
 </head>
 
 <body class="body-bg">
