@@ -61,10 +61,10 @@
                         {{--                    </div>--}}
                         <p>{{__("Don't have an account?")}} <a href="{{route('signUp')}}">{{__('Sign Up')}}</a></p>
                     </div>
-                    <div class="default-access-wrapper">
+                    {{-- <div class="default-access-wrapper">
                         <div class="auth-btn user">{{__('User Login')}}</div>
                         <div class="auth-btn admin">{{__('Admin Login')}}</div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -73,27 +73,6 @@
 
 @section('script')
 
-
-    <script>
-        var email = $('input#exampleInputEmail1');
-        var pass = $('input#exampleInputPassword1');
-
-        $(window).on('load', function () {
-            email.val('user@email.com');
-            pass.val('123456');
-        });
-
-        $('.user').on('click', function () {
-            email.val('user@email.com');
-            pass.val('123456');
-        });
-
-
-        $('.admin').on('click', function () {
-            email.val('admin@email.com');
-            pass.val('123456');
-        })
-    </script>
 
     <script>
         $(".toggle-password").click(function () {
