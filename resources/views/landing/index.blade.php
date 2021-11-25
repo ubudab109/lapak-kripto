@@ -327,7 +327,7 @@
                         <li class="animation" data-animation="fadeInUp" data-animation-delay="0.5s"><a href="#">FAQ</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-5 col-md-6 res_md_mt_30 res_sm_mt_20">
+                {{-- <div class="col-lg-5 col-md-6 res_md_mt_30 res_sm_mt_20">
                 	<div class="newsletter_form">
                         <h4 class="footer_title border_title animation" data-animation="fadeInUp" data-animation-delay="0.2s">Newsletter</h4>
                         <p class="animation" data-animation="fadeInUp" data-animation-delay="0.4s">By subscribing to our mailing list you will always be update with the latest news from us.</p>
@@ -336,7 +336,7 @@
                           <button type="submit" title="Subscribe" class="btn-info" name="submit" value="Submit"> Subscribe </button>
                         </form>
                     </div>
-                </div>
+                </div> --}}
       		</div>
     	</div>
     </div>
