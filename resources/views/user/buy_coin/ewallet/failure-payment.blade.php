@@ -1,5 +1,5 @@
 @extends('user.master',['menu'=>'coin', 'sub_menu'=>'buy_coin'])
-@section('title', isset($title) ? $title : '')
+@section('title', 'Lapak Kripto')
 @section('content')
   <div class="row justify-content-center">
     <div class="col-12 text-white">

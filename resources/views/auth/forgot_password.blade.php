@@ -1,5 +1,5 @@
 @extends('auth.master',['menu'=>'dashboard'])
-@section('title', isset($title) ? $title : '')
+@section('title', 'Lapak Kripto')
 
 @section('content')
     <div class="user-content-wrapper">

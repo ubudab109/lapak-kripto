@@ -9,13 +9,13 @@
     <meta name="description" content="The Highly Secured Bitcoin Wallet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="{{allsetting('app_title')}}"/>
+    <meta property="og:title" content="Lapak Kripto"/>
     <meta property="og:image" content="{{asset('assets/admin/images/logo.svg')}}">
     <meta property="og:site_name" content="Cpoket"/>
     <meta property="og:url" content="{{url()->current()}}"/>
-{{--    <meta property="og:type" content="{{allsetting('app_title')}}"/>--}}
-{{--    <meta itemscope itemtype="{{ url()->current() }}/{{allsetting('app_title')}}" />--}}
-{{--    <meta itemprop="headline" content="{{allsetting('app_title')}}" />--}}
+{{--    <meta property="og:type" content="Lapak Kripto"/>--}}
+{{--    <meta itemscope itemtype="{{ url()->current() }}/Lapak Kripto" />--}}
+{{--    <meta itemprop="headline" content="Lapak Kripto" />--}}
     <meta itemprop="image" content="{{asset('assets/admin/images/logo.svg')}}" />
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{asset('assets/admin/css/bootstrap.min.css')}}">
@@ -41,7 +41,7 @@
     <!-- Responsive CSS -->
     <link rel="stylesheet" href="{{asset('assets/admin/css/responsive.css')}}">
     @yield('style')
-    <title>@yield('title')</title>
+    <title>Lapak Kripto</title>
 </head>
 
 <body class="body-bg">

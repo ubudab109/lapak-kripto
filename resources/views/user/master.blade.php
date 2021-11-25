@@ -9,13 +9,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:type" content="article" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <meta property="og:title" content="{{allsetting('app_title')}}"/>
+    <meta property="og:title" content="Lapak Kripto"/>
     <meta property="og:image" content="{{asset('assets/user/images/logo.svg')}}">
     <meta property="og:site_name" content="Cpoket"/>
     <meta property="og:url" content="{{url()->current()}}"/>
-    <meta property="og:type" content="{{allsetting('app_title')}}"/>
-    <meta itemscope itemtype="{{ url()->current() }}/{{allsetting('app_title')}}" />
-    <meta itemprop="headline" content="{{allsetting('app_title')}}" />
+    <meta property="og:type" content="Lapak Kripto"/>
+    <meta itemscope itemtype="{{ url()->current() }}/Lapak Kripto" />
+    <meta itemprop="headline" content="Lapak Kripto" />
     <meta itemprop="image" content="{{asset('assets/user/images/logo.svg')}}" />
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{asset('assets/user/css/bootstrap.min.css')}}">
@@ -43,7 +43,7 @@
     <link rel="stylesheet" href="{{asset('assets/user/css/responsive.css')}}">
 
     @yield('style')
-    <title>{{allsetting('app_title')}}::@yield('title')</title>
+    <title>Lapak Kripto</title>
     <script src="https://kit.fontawesome.com/d817027240.js" crossorigin="anonymous"></script>
 </head>
 
